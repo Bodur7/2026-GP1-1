@@ -1,0 +1,635 @@
+{
+  "status": "informational_partial_archives",
+  "warning": "These collections are audited as received evidence and must not replace final_food_dataset_v2.",
+  "selected_cleaned": {
+    "images": 1339,
+    "download_error_files": 1621,
+    "download_error_reasons": {
+      "other": 1,
+      "TooManyRequestsMeTAException": 1619,
+      "WebException": 1
+    },
+    "decoded_successfully": 1339,
+    "decode_errors": [],
+    "matched_final_manifest": 1337,
+    "not_in_final_manifest": 2,
+    "matched_final_splits": {
+      "test": 523,
+      "val": 133,
+      "train": 681
+    },
+    "matched_final_classes": {
+      "arayes": 201,
+      "areeka": 178,
+      "aseeda": 317,
+      "baba-ghanoush": 196,
+      "briouat": 153,
+      "dajaj-mashwi": 43,
+      "hasa-adas": 47,
+      "hininy": 24,
+      "maamoul-saudi-arabia": 45,
+      "masoub": 35,
+      "saleeg": 49,
+      "shakshouka-egypt": 49
+    },
+    "unmatched_source_classes": {
+      "areeka": 1,
+      "aseeda": 1
+    },
+    "unmatched_images": [
+      {
+        "class_name": "areeka",
+        "filename": "EXIF_areeka_440.jpg",
+        "sha256": "8bbd073466a75641bf3afb06d383ff401f5b24fa5336b699781bfd4395a2cc21",
+        "documented_exclusion": "removed areeka near-copy; retained visually consistent masoub label"
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "EXIF_aseeda_285.jpg",
+        "sha256": "c28120202cf6413ef7e6508f540fb5228432ccb2042755cdc99d24245a174d86",
+        "documented_exclusion": "removed both ambiguous cross-class copies after visual review"
+      }
+    ],
+    "unmatched_with_documented_exclusion": 2,
+    "dimension_mismatch_count": 0,
+    "dimension_mismatch_examples": [],
+    "exact_duplicate_groups_within_received_collection": 0,
+    "duplicate_examples": []
+  },
+  "cleaning_review": {
+    "images": 91,
+    "download_error_files": 0,
+    "download_error_reasons": {},
+    "decoded_successfully": 91,
+    "decode_errors": [],
+    "matched_final_manifest": 0,
+    "not_in_final_manifest": 91,
+    "matched_final_splits": {},
+    "matched_final_classes": {},
+    "unmatched_source_classes": {
+      "areeka": 16,
+      "aseeda": 15,
+      "baba-ghanoush": 3,
+      "dajaj-mashwi": 7,
+      "hasa-adas": 2,
+      "hininy": 8,
+      "maamoul-saudi-arabia": 2,
+      "masoub": 26,
+      "saleeg": 6,
+      "shakshouka-egypt": 6
+    },
+    "unmatched_images": [
+      {
+        "class_name": "areeka",
+        "filename": "testing_exif__EXIF_Areeka(Yemen)107.jpg",
+        "sha256": "e4db217dd3f1bd0f655c90bd26c1bd5a62bfd24096fd5fbc28da62c69c0ecdcc",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "testing_exif__EXIF_Areeka(Yemen)130.jpg",
+        "sha256": "689ee6f128b60540114e6b78c29071ec34cb282c9826b4f2130568c651b9b732",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "testing_exif__EXIF_Areeka(Yemen)131.jpg",
+        "sha256": "fc2bcb9a3ec5c6cd476f25b66a09f30d9b6c1cea4eaca8546dfb26ba6bf131d7",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "testing_exif__EXIF_Areeka(Yemen)135.jpg",
+        "sha256": "50bae2911b45b2a21cb7c2c9d38bc7999167620f8de88a01dcde52154d6394ad",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "testing_exif__EXIF_Areeka(Yemen)137.jpg",
+        "sha256": "dbc83a16ce9a86ee9bba7508d3f54339f981302fcf303a2f3026696603326f00",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_102.jpg",
+        "sha256": "b5c1f62c9f044c792ec7b0da97bda22c5f7f8cb5fc8cf515cbd930cf9a116cec",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_166.jpg",
+        "sha256": "17c0eda8d528480adcd6f0c715f5dd42147428f9c44b4cb74ef47c044989eff3",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_171.jpg",
+        "sha256": "22044510e2efc92c3438099922f7d086b9fb550168388d7e9b0f2bbbb9fbd53a",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_362.jpg",
+        "sha256": "84d644f50099371183dd6d25376e7cb32678a9e0357c6fdecb4998fb40e7e5c3",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_41.jpg",
+        "sha256": "aefc2afdaa30cced009f542bab643bd4c87358f77f5384ee21249df9c3fe51ea",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_43.jpg",
+        "sha256": "66469dfa47435d4008c0156a606a8e73b79d35fea6525cecf9260a65d20257d9",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_561.jpg",
+        "sha256": "5a9e46096a418930a42892834001514bc1bcb485869753c2614e725aa6e7ac42",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_598.jpg",
+        "sha256": "248d5bfa1c4192c4bd361083622355510b158dd95bdbdfd7031e2546bc1f2518",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_601.jpg",
+        "sha256": "729e3683ec439bbfaad663ba43a7b0163b842138582df02e31afebcc8643ae90",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_629.jpg",
+        "sha256": "b9d76b74a79db1a7d90827e1356fb2d28d41531fe9ace2bd6812f691196d232b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "areeka",
+        "filename": "training_exif__EXIF_areeka_96.jpg",
+        "sha256": "3120455f0cd116f10f0a8f49de0e677c999472a9f842a53def7dd9372848093e",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "testing_exif__EXIF_Aseeda(Yemen)119.jpg",
+        "sha256": "233c9532417a2b772808dc6fad5771d666a636b76c7b31a400e41d7c6c1890c4",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "testing_exif__EXIF_Aseeda(Yemen)124.jpg",
+        "sha256": "204177af3e57dfe81cc5c4723cd4bc624fdda05044199d9e3e34ba18afd39cf3",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "testing_exif__EXIF_Aseeda(Yemen)126.jpg",
+        "sha256": "344aac28b63898ff7cd8e9c6abef7fd9814db1a5ef1b5a362c9c5279420d665a",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "testing_exif__EXIF_Aseeda(Yemen)129.jpg",
+        "sha256": "3c96f41e423f395da22168715dcc61b119d54a8ca9439f38e72d3ce943a07e80",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_211.jpg",
+        "sha256": "a4aacfa946cb1b6698d2692ecfe5bb3b7e6606c0b0cc2615a59808a5f6b08997",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_255.jpg",
+        "sha256": "61b5552d90a8e89554150264eb5643843e517fe50f64500a98d7116bf8fb9084",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_266.jpg",
+        "sha256": "a46231d1276ded641150468ce8e93b64e33813dff023facfc649564d72e99bcf",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_269.jpg",
+        "sha256": "bff259ae7f179350e3801674b4d13b1c3f1e3538c62f378b1e07505cd9568666",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_281.jpg",
+        "sha256": "629a49784d657cbc6c8ce30c495cf592c976dddccf2d728e958fa57f00c82211",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_291.jpg",
+        "sha256": "f5921f31d269afda844a0c52db79d4f126128878543b5a3cfdaa3c0a825834e6",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_292.jpg",
+        "sha256": "67f49e8a0075321356fd0548e94e507e399760260b77daaf229d27510282596d",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_300.jpg",
+        "sha256": "3ab2fafec7698361a61ad78c92923e9fdd727b76698591a968bb7cd497553fee",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_316.jpg",
+        "sha256": "31204dc25e0fe67a0c99d33edf458c41b673b3e9202fb147ed3492217a2fb39c",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_61.jpg",
+        "sha256": "ac5b351b75c967fa76224f021d724bc56842b90752a4a93475d076aeaaee9062",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "aseeda",
+        "filename": "training_exif__EXIF_aseeda_94.jpg",
+        "sha256": "799e28874f605efa833d3ef27eb8839bb103c74261be9e5eee7800c4fc126923",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "baba-ghanoush",
+        "filename": "testing_exif__EXIF_baba-ghanoush_314.jpg",
+        "sha256": "af48de978b16f6820990d12a3a88b8d58723d2bad3490d59428c74c065008905",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "baba-ghanoush",
+        "filename": "testing_exif__EXIF_baba-ghanoush_325.jpg",
+        "sha256": "8e1b2626ffcb7e4d05f7fce6c6555a58daac6e3199bed777e6491cea03f0f7c4",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "baba-ghanoush",
+        "filename": "training_exif__EXIF_baba-ghanoush_229.jpg",
+        "sha256": "9fe8f22c3e9bcda93d90c66fcd33f6d9fde89a1208479f952355339d4cd436aa",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "testing_exif__EXIF_dajaj-mashwi_19.jpg",
+        "sha256": "8e99dd10a96c2b37012bb788f0e20ffbaea8e83b4d23ee0b8f04a89e04159480",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_250.jpg",
+        "sha256": "358939217b68b8b7e6c494420121eebd47096aaaa88f9e5bc1f6a33d9f9a0a55",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_288.jpg",
+        "sha256": "5ae1b20fb504fbbbd9b108638b3c6ac5fae88cab65e6e4b499b562216fa0f8fb",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_313.jpg",
+        "sha256": "469be28ab192e27da58bb7624783a28e0a67f410e2b754cef0400e7f4df879eb",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_73.jpg",
+        "sha256": "f280d857cb9277096ac99eea9090cbf073d3b8e7d929666757ae175498ec0e6b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_90.jpg",
+        "sha256": "f5af08c8623ed059e0e0aed010063be8e623e27931fe8d3c442628bcef7190a7",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "dajaj-mashwi",
+        "filename": "training_exif__EXIF_dajaj-mashwi_95.jpg",
+        "sha256": "1eddbdbbd387016f8456154b7a98468730f83c12dc0af5e04c48f1b19beab2b0",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hasa-adas",
+        "filename": "training_exif__EXIF_hasa-adas_242.jpg",
+        "sha256": "0cfea39360e45774c13cc17f7cc7e39aaf70a295c5758488e3739b705cd36191",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hasa-adas",
+        "filename": "training_exif__EXIF_hasa-adas_3.jpg",
+        "sha256": "5922714495334b90cc40c3ca894da9fb678fde8a8c5f978b179d202b87c3a512",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "testing_exif__EXIF_hininy_119.jpg",
+        "sha256": "c399f7a8ba576865b182ba8892bfa9a467e5e24d0429f4b16b28bfeba4dd8080",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "testing_exif__EXIF_hininy_209.jpg",
+        "sha256": "5c52660e30d6f4228dbae5e550c74167fa5c9749c74573b9cbeb07c5686afd3a",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_182.jpg",
+        "sha256": "2c83c3b7b2822318d6c28d26a83d2ad1bdfe27d9dd0e6c44f3b1142d4e404f56",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_226.jpg",
+        "sha256": "b5e114edd592999e3fbfc383a03bd24553fd0693c97ccb99adbd216c6f7fdf40",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_279.jpg",
+        "sha256": "22ecadb1852709885b17c6ef4005a8a9025ff5ad4499643afd9a2ddb0fa8fa2e",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_287.jpg",
+        "sha256": "e7e3a54b055ba50adaa37bd299f9be26f6fddf502cec657ded91677291cc8c81",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_301.jpg",
+        "sha256": "5c6e8725d83b488f665ae541b4bfd9d6c1c8328905fbf004bd418ea842b2e98f",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "hininy",
+        "filename": "training_exif__EXIF_hininy_327.jpg",
+        "sha256": "fb2c8d2c5c210d8ae36f026cf0f4f83adfa5aad853b0076921d3c1dd62c18860",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "maamoul-saudi-arabia",
+        "filename": "training_exif__EXIF_maamoul-saudi-arabia_288.jpg",
+        "sha256": "57857bb1c63a1562a0d4871ea9cd4ac20c280e09e8eee30a85ce5d8867509ba5",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "maamoul-saudi-arabia",
+        "filename": "training_exif__EXIF_maamoul-saudi-arabia_311.jpg",
+        "sha256": "311f1e209ec9170b92d45e49858f967bff3c1e9cb4001eebbfe48149ccf5e403",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)129.jpg",
+        "sha256": "5ca2237d77242f36013cf13d6c1583b6535a7124e155b40036167fcd4fc00d0b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)131.jpg",
+        "sha256": "4bd8a7c2ee9b5f4fc2696fb2c5ad64a182b86dc531a6758fcfde61ef0d7b2882",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)138.jpg",
+        "sha256": "3c57669e6af126172f00402b76482c70106745df50b1107660a6a19c30084ca5",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)139.jpg",
+        "sha256": "408890a9a8492f742cca8db5676d268ca3c0e7a1018c908b1a936d70cf06c964",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)140.jpg",
+        "sha256": "147fb1db4265a116b340489f77ea4a64141698d68fa2afd226036ff61e87d1f4",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)141.jpg",
+        "sha256": "d27bd6ffc189885aa1b3348bed20d4fecc4fd8d8497b2eb077f71c64937bbed1",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)142.jpg",
+        "sha256": "4bafe8d5338e19e17543960261d7c1a69c3eb86032c776a82f9ca012e9bad81d",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)143.jpg",
+        "sha256": "eb0edd4b83b474098504ef708910a28814522c17d173483cd03f1959be95853e",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)147.jpg",
+        "sha256": "dc4020bfcda103c200a0b6821461bead333f3035f7023407c052d50fadac5ba2",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)149.jpg",
+        "sha256": "4aecac652b9c2cf452b8f2f10121eaded03e8312b778a96e293e2a724dabd66b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "testing_exif__EXIF_Masoub(Yemen)150.jpg",
+        "sha256": "77167de39bf58cbe01870547c8beb10443ea3da303c1715bac1667873a9909a7",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_113.jpg",
+        "sha256": "c9f1bf84bcd4693b3f72d447e39b553782cdbe92174e8238d8fba3b8b2d031b7",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_129.jpg",
+        "sha256": "6def34508194187cc1f6bb1dc130acccc698d74bff5698f11b0b7bda0871c337",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_2.jpg",
+        "sha256": "c72b1198e25499e7a0195c06f44bf249dbd41e83a72daa1c1abf4a89a7c8cdf2",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_229.jpg",
+        "sha256": "b9b2d2d5610ab784d628490fc2660349ef47b94486981b5533966c194d68617d",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_245.jpg",
+        "sha256": "ae548efbf21094b81bc92d22aaea4ae219962245eb41950ad4859d64a7c80252",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_272.jpg",
+        "sha256": "de9a9b7508e0869bd3bb29ab1dc31b97a3ef6d7ceaee6ddff65cb0d81998585d",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_279.jpg",
+        "sha256": "ada20277418cb441b9322b47a830e18503b1ac25e478cbda4dceb60a30f43c8e",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_284.jpg",
+        "sha256": "4fcde1e7a13b4689551929bfeafd3fe4bd8c50370d37917811fa0473a9ac65a9",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_297.jpg",
+        "sha256": "86866a29b00f997f9bcd365f22264704edf52de763c94f6acd5330e99c71281f",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_311.jpg",
+        "sha256": "e3c1a4d69c329c3890a601475fe2075c6fd68d8ccead64818f049edd4a7cd3e5",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_318.jpg",
+        "sha256": "737b5a7cf3d8829f98a12e3cf76372b2791972d1d572101c16388ace40157b3a",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_57.jpg",
+        "sha256": "3f7890bb2b929f65da311f83ccab209dcba220655b8e59566b77f1e31a135276",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_60.jpg",
+        "sha256": "0a706d31cccdb282c7117574ff25090446f06ccb9c815f1c0a175c83619412ac",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_66.jpg",
+        "sha256": "054991126622b339c1bc5342f96ec887075ebeae51eb20ddd9c35465d3afc0b5",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "masoub",
+        "filename": "training_exif__EXIF_masoub_97.jpg",
+        "sha256": "6a22a73a118f3c957f268e3a54d81ee20f5574df88eef8bfa8ca7988af61f1b0",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_102.jpg",
+        "sha256": "e94ac92a2a29ffa63b3bdc8d5ac2024db8833e98047e7c1afe93d9a1b6db3c0b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_39.jpg",
+        "sha256": "88e06bcdb247eae1d64a85f50a16fc3c6256c2f53d7e45136543188ddf40f497",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_42.jpg",
+        "sha256": "07c4eddbb85d8bdd09d5f6bfd74ea4490301504b5d9a7aa38f4f283a43d6534b",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_45.jpg",
+        "sha256": "c06fbefa68ae00e0bf449b6f2d43ab588cc8af5714be812446dc8acbc0df128d",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_54.jpg",
+        "sha256": "7438234056d3034b6add5e0ec3bff877eb58f238ad6965eac678c6a3fb64375c",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "saleeg",
+        "filename": "training_exif__EXIF_saleeg_76.jpg",
+        "sha256": "3d70f0d681f92fcdb0ce8373ad68d99729b8c694be12535dd679bcbc7f44285a",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "testing_exif__EXIF_lshakshouka-egypt_103.jpg",
+        "sha256": "fdb88650cef2aa8c9e3fddf86570d78075055f0aeefb0e8a75f116313e5750bc",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "training_exif__EXIF_lshakshouka-egypt_124.jpg",
+        "sha256": "ca7cf02bfc847568129882553942d30ee87669e04d263ac77b476f8312c20fb8",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "training_exif__EXIF_lshakshouka-egypt_210.jpg",
+        "sha256": "9054597aed7b529edf3f30d59fa6423fd29cb70af74993d396226bbb19f87345",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "training_exif__EXIF_lshakshouka-egypt_23.jpg",
+        "sha256": "aa1f9dff8da51213f51938c1ec5c8d5bd49165e7b5e69ded5a5d855c16592e38",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "training_exif__EXIF_lshakshouka-egypt_355.jpg",
+        "sha256": "b8e714c75e8d2da3b4dad02db38ffb275e851e26e2d717ec1084e30dae302e92",
+        "documented_exclusion": null
+      },
+      {
+        "class_name": "shakshouka-egypt",
+        "filename": "training_exif__EXIF_lshakshouka-egypt_40.jpg",
+        "sha256": "c99e03408b16e590a287433520c9bdfb58a13974b096bb7d48dc598dfe666ea0",
+        "documented_exclusion": null
+      }
+    ],
+    "unmatched_with_documented_exclusion": 0,
+    "dimension_mismatch_count": 0,
+    "dimension_mismatch_examples": [],
+    "exact_duplicate_groups_within_received_collection": 0,
+    "duplicate_examples": []
+  }
+}

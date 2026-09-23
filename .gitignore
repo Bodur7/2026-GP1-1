@@ -1,0 +1,32 @@
+# Python / VS Code
+**/.venv/
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+.vscode/*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Local datasets and model weights
+**/data/*
+!**/data/.gitkeep
+
+**/models/*
+!**/models/.gitkeep
+
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Generated outputs
+**/outputs/
+**/runs/
+**/wandb/
+**/tensorboard/

@@ -1,0 +1,538 @@
+{
+  "samples": 91,
+  "top1_accuracy": 0.8571428571428571,
+  "top5_accuracy": 0.978021978021978,
+  "topk_accuracy": {
+    "1": 0.8571428571428571,
+    "2": 0.9120879120879121,
+    "3": 0.9230769230769231,
+    "4": 0.9560439560439561,
+    "5": 0.978021978021978
+  },
+  "confidence_diagnostics": {
+    "usage": "descriptive_test_only_do_not_select_thresholds_from_these_values",
+    "raw_ece_15_bins": 0.09648058332575837,
+    "mean_confidence_all": 0.8515688985061582,
+    "mean_confidence_correct": 0.8992408007070096,
+    "mean_confidence_errors": 0.5655374853010487,
+    "errors_at_or_above_0_5": 6,
+    "errors_at_or_above_0_7": 6,
+    "errors_at_or_above_0_8": 5
+  },
+  "per_class": [
+    {
+      "class_name": "areeka",
+      "images": 16,
+      "correct": 15,
+      "top1_accuracy": 0.9375,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "aseeda",
+      "images": 15,
+      "correct": 9,
+      "top1_accuracy": 0.6,
+      "top5_accuracy": 0.9333333333333333
+    },
+    {
+      "class_name": "baba-ghanoush",
+      "images": 3,
+      "correct": 3,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "dajaj-mashwi",
+      "images": 7,
+      "correct": 7,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "hasa-adas",
+      "images": 2,
+      "correct": 2,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "hininy",
+      "images": 8,
+      "correct": 8,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "maamoul-saudi-arabia",
+      "images": 2,
+      "correct": 2,
+      "top1_accuracy": 1.0,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "masoub",
+      "images": 26,
+      "correct": 24,
+      "top1_accuracy": 0.9230769230769231,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "saleeg",
+      "images": 6,
+      "correct": 5,
+      "top1_accuracy": 0.8333333333333334,
+      "top5_accuracy": 1.0
+    },
+    {
+      "class_name": "shakshouka-egypt",
+      "images": 6,
+      "correct": 3,
+      "top1_accuracy": 0.5,
+      "top5_accuracy": 0.8333333333333334
+    }
+  ],
+  "confusion_pairs": [
+    {
+      "true_class": "aseeda",
+      "predicted_class": "masoub",
+      "count": 4
+    },
+    {
+      "true_class": "areeka",
+      "predicted_class": "masoub",
+      "count": 1
+    },
+    {
+      "true_class": "aseeda",
+      "predicted_class": "saleeg",
+      "count": 1
+    },
+    {
+      "true_class": "aseeda",
+      "predicted_class": "hininy",
+      "count": 1
+    },
+    {
+      "true_class": "masoub",
+      "predicted_class": "clam_chowder",
+      "count": 1
+    },
+    {
+      "true_class": "masoub",
+      "predicted_class": "baba-ghanoush",
+      "count": 1
+    },
+    {
+      "true_class": "saleeg",
+      "predicted_class": "dajaj-mashwi",
+      "count": 1
+    },
+    {
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "Shawarma",
+      "count": 1
+    },
+    {
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "kebab",
+      "count": 1
+    },
+    {
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "fried_calamari",
+      "count": 1
+    }
+  ],
+  "misclassified": [
+    {
+      "file": "areeka\\training_exif__EXIF_areeka_96.jpg",
+      "true_class": "areeka",
+      "predicted_class": "masoub",
+      "predicted_confidence": 0.8929206660091499,
+      "true_class_confidence": 0.014409819290026295,
+      "true_class_rank": 4,
+      "top5": [
+        {
+          "class_name": "masoub",
+          "confidence": 0.8929206660091499
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.019227050135747603
+        },
+        {
+          "class_name": "baba-ghanoush",
+          "confidence": 0.016434678788957668
+        },
+        {
+          "class_name": "areeka",
+          "confidence": 0.014409819290026295
+        },
+        {
+          "class_name": "bread_pudding",
+          "confidence": 0.006310162479425069
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_255.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "masoub",
+      "predicted_confidence": 0.4914535316436347,
+      "true_class_confidence": 0.3956996220197806,
+      "true_class_rank": 2,
+      "top5": [
+        {
+          "class_name": "masoub",
+          "confidence": 0.4914535316436347
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.3956996220197806
+        },
+        {
+          "class_name": "hininy",
+          "confidence": 0.04417582483762525
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.0165472791249462
+        },
+        {
+          "class_name": "Kunafa",
+          "confidence": 0.016239634120363153
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_266.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "masoub",
+      "predicted_confidence": 0.9511682603760373,
+      "true_class_confidence": 0.005779562222298034,
+      "true_class_rank": 4,
+      "top5": [
+        {
+          "class_name": "masoub",
+          "confidence": 0.9511682603760373
+        },
+        {
+          "class_name": "clam_chowder",
+          "confidence": 0.010840442116052283
+        },
+        {
+          "class_name": "risotto",
+          "confidence": 0.009477491321194915
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.005779562222298034
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.004497107205737399
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_281.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "masoub",
+      "predicted_confidence": 0.7066020003786295,
+      "true_class_confidence": 0.06420604081441728,
+      "true_class_rank": 2,
+      "top5": [
+        {
+          "class_name": "masoub",
+          "confidence": 0.7066020003786295
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.06420604081441728
+        },
+        {
+          "class_name": "briouat",
+          "confidence": 0.06090717622757833
+        },
+        {
+          "class_name": "Kunafa",
+          "confidence": 0.039926248948442274
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.02738079774710719
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_292.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "saleeg",
+      "predicted_confidence": 0.18804739858503097,
+      "true_class_confidence": 0.0815089185033675,
+      "true_class_rank": 3,
+      "top5": [
+        {
+          "class_name": "saleeg",
+          "confidence": 0.18804739858503097
+        },
+        {
+          "class_name": "hasa-adas",
+          "confidence": 0.08739594838727016
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.0815089185033675
+        },
+        {
+          "class_name": "creme_brulee",
+          "confidence": 0.06168783310448487
+        },
+        {
+          "class_name": "briouat",
+          "confidence": 0.0563185212909147
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_61.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "hininy",
+      "predicted_confidence": 0.3629472775380616,
+      "true_class_confidence": 0.022769144376090036,
+      "true_class_rank": 9,
+      "top5": [
+        {
+          "class_name": "hininy",
+          "confidence": 0.3629472775380616
+        },
+        {
+          "class_name": "baba-ghanoush",
+          "confidence": 0.1486488351092864
+        },
+        {
+          "class_name": "hummus",
+          "confidence": 0.056539017879357355
+        },
+        {
+          "class_name": "ceviche",
+          "confidence": 0.03797313760381478
+        },
+        {
+          "class_name": "arayes",
+          "confidence": 0.03490000365087888
+        }
+      ]
+    },
+    {
+      "file": "aseeda\\training_exif__EXIF_aseeda_94.jpg",
+      "true_class": "aseeda",
+      "predicted_class": "masoub",
+      "predicted_confidence": 0.9285926102685715,
+      "true_class_confidence": 0.018594961212430643,
+      "true_class_rank": 2,
+      "top5": [
+        {
+          "class_name": "masoub",
+          "confidence": 0.9285926102685715
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.018594961212430643
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.013858193752892869
+        },
+        {
+          "class_name": "baba-ghanoush",
+          "confidence": 0.012758063936292403
+        },
+        {
+          "class_name": "saleeg",
+          "confidence": 0.002641477682602382
+        }
+      ]
+    },
+    {
+      "file": "masoub\\testing_exif__EXIF_Masoub(Yemen)150.jpg",
+      "true_class": "masoub",
+      "predicted_class": "clam_chowder",
+      "predicted_confidence": 0.9346917244326329,
+      "true_class_confidence": 0.006505423486684953,
+      "true_class_rank": 4,
+      "top5": [
+        {
+          "class_name": "clam_chowder",
+          "confidence": 0.9346917244326329
+        },
+        {
+          "class_name": "french_onion_soup",
+          "confidence": 0.007346848238408011
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.006997313256123391
+        },
+        {
+          "class_name": "masoub",
+          "confidence": 0.006505423486684953
+        },
+        {
+          "class_name": "bread_pudding",
+          "confidence": 0.00335628795721984
+        }
+      ]
+    },
+    {
+      "file": "masoub\\training_exif__EXIF_masoub_113.jpg",
+      "true_class": "masoub",
+      "predicted_class": "baba-ghanoush",
+      "predicted_confidence": 0.3036255219885652,
+      "true_class_confidence": 0.25077526513364234,
+      "true_class_rank": 2,
+      "top5": [
+        {
+          "class_name": "baba-ghanoush",
+          "confidence": 0.3036255219885652
+        },
+        {
+          "class_name": "masoub",
+          "confidence": 0.25077526513364234
+        },
+        {
+          "class_name": "saleeg",
+          "confidence": 0.15468141230634974
+        },
+        {
+          "class_name": "aseeda",
+          "confidence": 0.08394753833401217
+        },
+        {
+          "class_name": "shrimp_and_grits",
+          "confidence": 0.04711323271047516
+        }
+      ]
+    },
+    {
+      "file": "saleeg\\training_exif__EXIF_saleeg_45.jpg",
+      "true_class": "saleeg",
+      "predicted_class": "dajaj-mashwi",
+      "predicted_confidence": 0.8014375300242705,
+      "true_class_confidence": 0.012189559082754724,
+      "true_class_rank": 5,
+      "top5": [
+        {
+          "class_name": "dajaj-mashwi",
+          "confidence": 0.8014375300242705
+        },
+        {
+          "class_name": "chicken_wings",
+          "confidence": 0.0856399890280811
+        },
+        {
+          "class_name": "peking_duck",
+          "confidence": 0.022432734528239875
+        },
+        {
+          "class_name": "Mandi",
+          "confidence": 0.012788764283683925
+        },
+        {
+          "class_name": "saleeg",
+          "confidence": 0.012189559082754724
+        }
+      ]
+    },
+    {
+      "file": "shakshouka-egypt\\training_exif__EXIF_lshakshouka-egypt_210.jpg",
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "Shawarma",
+      "predicted_confidence": 0.2296001589544229,
+      "true_class_confidence": 0.06384369638537425,
+      "true_class_rank": 5,
+      "top5": [
+        {
+          "class_name": "Shawarma",
+          "confidence": 0.2296001589544229
+        },
+        {
+          "class_name": "hininy",
+          "confidence": 0.08540548479311655
+        },
+        {
+          "class_name": "pulled_pork_sandwich",
+          "confidence": 0.0770940414846314
+        },
+        {
+          "class_name": "lobster_roll_sandwich",
+          "confidence": 0.07374237639281397
+        },
+        {
+          "class_name": "shakshouka-egypt",
+          "confidence": 0.06384369638537425
+        }
+      ]
+    },
+    {
+      "file": "shakshouka-egypt\\training_exif__EXIF_lshakshouka-egypt_23.jpg",
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "kebab",
+      "predicted_confidence": 0.17316168486653674,
+      "true_class_confidence": 0.03171418786798215,
+      "true_class_rank": 7,
+      "top5": [
+        {
+          "class_name": "kebab",
+          "confidence": 0.17316168486653674
+        },
+        {
+          "class_name": "Shawarma",
+          "confidence": 0.16589771828714547
+        },
+        {
+          "class_name": "arayes",
+          "confidence": 0.15055789853005622
+        },
+        {
+          "class_name": "pulled_pork_sandwich",
+          "confidence": 0.1331656840817743
+        },
+        {
+          "class_name": "Shishabark",
+          "confidence": 0.051875605498460875
+        }
+      ]
+    },
+    {
+      "file": "shakshouka-egypt\\training_exif__EXIF_lshakshouka-egypt_40.jpg",
+      "true_class": "shakshouka-egypt",
+      "predicted_class": "fried_calamari",
+      "predicted_confidence": 0.38773894384808877,
+      "true_class_confidence": 0.18973163158588713,
+      "true_class_rank": 2,
+      "top5": [
+        {
+          "class_name": "fried_calamari",
+          "confidence": 0.38773894384808877
+        },
+        {
+          "class_name": "shakshouka-egypt",
+          "confidence": 0.18973163158588713
+        },
+        {
+          "class_name": "hininy",
+          "confidence": 0.0947314707863047
+        },
+        {
+          "class_name": "masoub",
+          "confidence": 0.06371076305212062
+        },
+        {
+          "class_name": "kebab",
+          "confidence": 0.038443819801904484
+        }
+      ]
+    }
+  ]
+}

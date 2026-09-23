@@ -1,0 +1,5 @@
+# Core dependencies for the checked-in baseline scripts.
+torch
+torchvision
+Pillow
+numpy
