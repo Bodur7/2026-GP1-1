@@ -1,0 +1,218 @@
+Allergen_Category,Keyword
+Dairy allergy,milk
+Dairy allergy,butter
+Dairy allergy,cream
+Dairy allergy,cheese
+Dairy allergy,whey
+Dairy allergy,casein
+Dairy allergy,caseinate
+Dairy allergy,yogurt
+Dairy allergy,ghee
+Dairy allergy,lactose
+Dairy allergy,buttermilk
+Dairy allergy,curd
+Dairy allergy,condensed milk
+Dairy allergy,sour cream
+Dairy allergy,custard
+Dairy allergy,حليب
+Dairy allergy,لبن
+Dairy allergy,زبادي
+Dairy allergy,قشطة
+Dairy allergy,زبدة
+Dairy allergy,جبن
+Dairy allergy,لاكتوز
+Dairy allergy,كازين
+Dairy allergy,سمن
+Dairy allergy,مصل اللبن
+Dairy allergy,خثارة الحليب
+Egg allergy,egg
+Egg allergy,eggs
+Egg allergy,mayonnaise
+Egg allergy,meringue
+Egg allergy,albumin
+Egg allergy,ovalbumin
+Egg allergy,lysozyme
+Egg allergy,yolk
+Egg allergy,egg white
+Egg allergy,egg powder
+Egg allergy,بيض
+Egg allergy,صفار البيض
+Egg allergy,بياض البيض
+Egg allergy,مايونيز
+Egg allergy,ألبومين
+Egg allergy,مسحوق البيض
+Wheat allergy,wheat
+Wheat allergy,flour
+Wheat allergy,breadcrumbs
+Wheat allergy,semolina
+Wheat allergy,couscous
+Wheat allergy,barley
+Wheat allergy,rye
+Wheat allergy,malt
+Wheat allergy,gluten
+Wheat allergy,durum
+Wheat allergy,bulgur
+Wheat allergy,spelt
+Wheat allergy,wheat starch
+Wheat allergy,bran
+Wheat allergy,قمح
+Wheat allergy,دقيق
+Wheat allergy,جلوتين
+Wheat allergy,شعير
+Wheat allergy,سميد
+Wheat allergy,برغل
+Wheat allergy,كسكسي
+Wheat allergy,نشا القمح
+Wheat allergy,بقصمات
+Wheat allergy,نخالة
+Wheat allergy,جودار
+Peanut allergy,peanut
+Peanut allergy,peanuts
+Peanut allergy,peanut oil
+Peanut allergy,peanut butter
+Peanut allergy,groundnut
+Peanut allergy,foul sudani
+Peanut allergy,فول سوداني
+Peanut allergy,زبدة الفول
+Peanut allergy,زيت الفول السوداني
+Peanut allergy,فول أرضي
+Tree nut allergy,almond
+Tree nut allergy,almonds
+Tree nut allergy,cashew
+Tree nut allergy,cashews
+Tree nut allergy,walnut
+Tree nut allergy,walnuts
+Tree nut allergy,pecan
+Tree nut allergy,pecans
+Tree nut allergy,pistachio
+Tree nut allergy,pistachios
+Tree nut allergy,hazelnut
+Tree nut allergy,hazelnuts
+Tree nut allergy,brazil nut
+Tree nut allergy,macadamia
+Tree nut allergy,chestnut
+Tree nut allergy,pine nut
+Tree nut allergy,لوز
+Tree nut allergy,كاجو
+Tree nut allergy,جوز
+Tree nut allergy,عين الجمل
+Tree nut allergy,فستق
+Tree nut allergy,بندق
+Tree nut allergy,كستناء
+Tree nut allergy,صنوبر
+Soy allergy,soy
+Soy allergy,soya
+Soy allergy,soybeans
+Soy allergy,soy sauce
+Soy allergy,tofu
+Soy allergy,edamame
+Soy allergy,soy lecithin
+Soy allergy,textured vegetable protein
+Soy allergy,soy protein
+Soy allergy,صويا
+Soy allergy,فول الصويا
+Soy allergy,صلصة الصويا
+Soy allergy,توفو
+Soy allergy,ليسيثين الصويا
+Soy allergy,بروتين نباتي
+Soy allergy,إدامامي
+Fish allergy,fish
+Fish allergy,salmon
+Fish allergy,tuna
+Fish allergy,cod
+Fish allergy,anchovy
+Fish allergy,sardine
+Fish allergy,tilapia
+Fish allergy,mackerel
+Fish allergy,trout
+Fish allergy,سمك
+Fish allergy,أسماك
+Fish allergy,سلمون
+Fish allergy,تونا
+Fish allergy,أنشوجة
+Fish allergy,سردين
+Fish allergy,وقار
+Shellfish allergy,shrimp
+Shellfish allergy,crab
+Shellfish allergy,lobster
+Shellfish allergy,prawn
+Shellfish allergy,prawns
+Shellfish allergy,crayfish
+Shellfish allergy,krill
+Shellfish allergy,جمبري
+Shellfish allergy,روبيان
+Shellfish allergy,قبقب
+Shellfish allergy,استاكوزا
+Shellfish allergy,سلطعون
+Shellfish allergy,سرطان البحر
+Molluscs allergy,mussel
+Molluscs allergy,mussels
+Molluscs allergy,oyster
+Molluscs allergy,oysters
+Molluscs allergy,scallop
+Molluscs allergy,scallops
+Molluscs allergy,squid
+Molluscs allergy,octopus
+Molluscs allergy,clam
+Molluscs allergy,clams
+Molluscs allergy,snail
+Molluscs allergy,محار
+Molluscs allergy,حبار
+Molluscs allergy,أخطبوط
+Molluscs allergy,بلح البحر
+Molluscs allergy,حلزون
+Molluscs allergy,قواقع
+Sesame allergy,sesame
+Sesame allergy,sesame seeds
+Sesame allergy,tahini
+Sesame allergy,sesame oil
+Sesame allergy,til
+Sesame allergy,binniseed
+Sesame allergy,سمسم
+Sesame allergy,طحينة
+Sesame allergy,زيت سمسم
+Sesame allergy,طحينية
+Sesame allergy,بذور السمسم
+Celery allergy,celery
+Celery allergy,celery seed
+Celery allergy,celery salt
+Celery allergy,celery stalk
+Celery allergy,celery root
+Celery allergy,كرفس
+Celery allergy,بذور الكرفس
+Celery allergy,ملح الكرفس
+Celery allergy,جذر الكرفس
+Mustard allergy,mustard
+Mustard allergy,mustard powder
+Mustard allergy,mustard seed
+Mustard allergy,mustard oil
+Mustard allergy,dijon
+Mustard allergy,خردل
+Mustard allergy,مسحوق الخردل
+Mustard allergy,بذور الخردل
+Mustard allergy,مستردة
+Mustard allergy,خردل ديجون
+Lupin allergy,lupin
+Lupin allergy,lupine
+Lupin allergy,lupin flour
+Lupin allergy,lupin seed
+Lupin allergy,lupini
+Lupin allergy,ترمس
+Lupin allergy,دقيق الترمس
+Lupin allergy,بذور الترمس
+Sulphites allergy,sulfite
+Sulphites allergy,sulphite
+Sulphites allergy,sulfur dioxide
+Sulphites allergy,metabisulfite
+Sulphites allergy,e220
+Sulphites allergy,e221
+Sulphites allergy,e222
+Sulphites allergy,e223
+Sulphites allergy,e224
+Sulphites allergy,e228
+Sulphites allergy,كبريت
+Sulphites allergy,ثاني أكسيد الكبريت
+Sulphites allergy,سولفيت
+Sulphites allergy,ميتابيسولفيت
+Sulphites allergy,مواد حافظة ٢٢٠
+Sulphites allergy,كبريتات
