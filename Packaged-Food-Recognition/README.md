@@ -1,77 +1,40 @@
 # Packaged Food Recognition - Misbar
 
-This component analyzes packaged-food labels in Arabic and English. It extracts label text with OCR, normalizes the text, and matches ingredient terms against a curated allergen lexicon.
+This folder currently contains the allergen keyword dataset and the regulatory references supplied for the packaged-food component. OCR implementation, model code, tests, and evaluation files have not been added yet.
 
-## Pipeline
-
-```text
-Label image -> OCR -> text normalization -> allergen keyword matching -> reviewable result
-```
-
-The current matcher returns evidence-based candidate matches. It does not declare a product medically safe and must not replace the product label, manufacturer guidance, or professional medical advice.
-
-## Structure
+## Current structure
 
 ```text
 Packaged-Food-Recognition/
 ├── Datasets/
-│   ├── comprehensive_allergens_dataset.csv
-│   ├── allergen_categories.csv
-│   ├── source_mapping.csv
-│   └── README.md
-├── data/
-│   └── README.md
-├── models/
-│   └── README.md
+│   └── comprehensive_allergens_dataset.csv
 ├── references/
 │   ├── Food_Allergens_Control.pdf
-│   ├── SOURCES.md
-│   └── README.md
-├── reports/
-│   └── README.md
-├── src/
-│   ├── ocr.py
-│   ├── text_preprocessing.py
-│   ├── allergen_matcher.py
-│   ├── pipeline.py
-│   └── README.md
-├── tests/
-│   ├── test_allergen_matcher.py
-│   └── README.md
-├── requirements.txt
+│   └── SOURCES.md
 └── README.md
 ```
 
-### Folder responsibilities
+## Allergen keyword dataset
 
-| Path | Purpose |
-| --- | --- |
-| `Datasets/` | Bilingual allergen keywords, canonical categories, and source mapping. |
-| `data/` | Local-only product-label images and OCR datasets. |
-| `models/` | Local-only OCR/model files. |
-| `references/` | Regulatory source document and source register. |
-| `src/` | OCR, normalization, matching, and pipeline code. |
-| `tests/` | Automated tests for normalization and matching. |
-| `reports/` | Evaluation reports for OCR and allergen matching. |
+The allergen dataset was developed as a curated keyword dataset based primarily on allergen-labeling requirements published by the Saudi Food and Drug Authority (SFDA), supplemented by the European Commission's list of 14 food allergens and the U.S. Food and Drug Administration's major food allergen guidance.
 
-## Setup
+Each allergen category was expanded with common ingredient names, food-derived ingredients, and Arabic terminology to improve keyword-based matching of OCR-extracted ingredient labels.
 
-Run from the repository root:
+The supplied dataset is stored at:
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r Packaged-Food-Recognition/requirements.txt
+```text
+Datasets/comprehensive_allergens_dataset.csv
 ```
 
-Tesseract OCR must also be installed on the machine with Arabic and English language data (`ara` and `eng`).
+It contains the following columns:
 
-## Example
+- `Allergen_Category`
+- `Keyword`
 
-```powershell
-python Packaged-Food-Recognition/src/pipeline.py path\to\label.jpg
-```
+## References
 
-## Data policy
+The supplied SFDA document is stored in `references/Food_Allergens_Control.pdf`. The SFDA, European Commission, and FDA citations and links are listed in `references/SOURCES.md`.
 
-Do not commit product images, private datasets, credentials, or model weights. Commit the small curated lexicon and its source metadata so changes can be reviewed and reproduced.
+## Current scope
+
+This folder currently documents the provided dataset and its sources only. The OCR method, matching implementation, model selection, tests, and evaluation structure should be added after the team approves the technical approach.
