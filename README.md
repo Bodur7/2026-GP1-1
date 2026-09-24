@@ -1,125 +1,111 @@
-# Misbar — 2026 Graduation Project
+# Misbar - 2026 Graduation Project
 
-Misbar is a bilingual food-safety system that uses artificial intelligence to help users understand food items and make safer, more informed food choices.
+## Introduction
 
-The AI part of the project is divided into two main components:
+Misbar is a bilingual food-safety project that uses artificial intelligence to help users understand food items and make safer, more informed food choices.
 
-1. Dish recognition
-2. Packaged-food recognition
+The project currently contains two AI components:
 
-## System components
+1. **Dish Recognition:** identifies a dish from an uploaded or captured image.
+2. **Packaged Food Recognition:** contains the curated allergen keyword dataset and its regulatory references for future analysis of OCR-extracted food-label text.
 
-### 1. Dish Recognition
+## Project goal
 
-The `Dish-Recognition/` component identifies a dish from an image captured with a mobile camera or uploaded by the user.
-
-The component includes:
-
-- A verified DINOv2 ViT-B/14 baseline.
-- 121 supported food classes.
-- Training, evaluation, and inference scripts.
-- Dataset manifests and integrity reports.
-- Model evaluation results.
-- Data and model audit files.
-- Local checkpoint verification.
-
-For detailed setup and usage instructions, see:
-
-```text
-Dish-Recognition/README.md
-```
-
-### 2. Packaged Food Recognition
-
-The `Packaged-Food-Recognition/` component processes images of packaged-food labels.
-
-Its planned pipeline includes:
-
-```text
-Food-label image
-        ↓
-Text extraction using OCR
-        ↓
-Ingredient and allergen analysis
-        ↓
-Allergy-related result
-```
-
-This component will contain its own code, configuration, documentation, reports, model files, and dependencies.
-
-For more information, see:
-
-```text
-Packaged-Food-Recognition/README.md
-```
+Misbar aims to provide clear food information by combining visual dish recognition with packaged-food allergen information. The system is intended to support user awareness; it does not replace product labels, manufacturer guidance, or professional medical advice.
 
 ## Repository structure
 
 ```text
 2026-GP1-1/
-├── .vscode/                         # Shared VS Code settings and tasks
-│
-├── Dish-Recognition/                # Dish-classification component
-│   ├── audits/                      # Data and model audits
-│   ├── configs/                     # Training configuration
-│   ├── data/                        # Local dataset location
-│   ├── dataset_reports/             # Dataset manifests and integrity reports
-│   ├── docs/                        # Component documentation
-│   ├── models/                      # Local model checkpoints
-│   ├── reports/                     # Evaluation results
-│   ├── scripts/                     # Training, evaluation, and inference
-│   ├── model_registry.json
-│   ├── requirements.txt
-│   └── README.md
-│
-├── Packaged-Food-Recognition/       # OCR and allergen-analysis component
-│   └── README.md
-│
-├── .gitattributes                   # Cross-platform text-file settings
-├── .gitignore                       # Files excluded from Git
-└── README.md                        # Main project documentation
+├── Dish-Recognition/                  # Dish-classification model and evidence
+├── Packaged-Food-Recognition/         # Allergen keyword dataset and references
+├── Sprint-1/                          # Sprint 1 planning and deliverables
+├── .vscode/                           # Shared VS Code settings and tasks
+├── .gitattributes
+├── .gitignore
+├── AUTHORS
+└── README.md
 ```
 
-## Current status
+### Dish Recognition
 
-| Component | Status |
-| --- | --- |
-| Dish Recognition | Verified 121-class baseline available |
-| Packaged Food Recognition | Structure created; implementation will be added |
+`Dish-Recognition/` preserves the verified DINOv2 ViT-B/14 baseline for 121 food classes. It includes training, evaluation, inference, reports, configuration, and audit files.
 
-## Development environment
+See `Dish-Recognition/README.md` for component details.
 
-The project uses Python 3.10 or later.
+### Packaged Food Recognition
 
-Each component maintains its own `requirements.txt` file because the models may require different dependencies.
+`Packaged-Food-Recognition/` currently contains:
 
-The shared `.vscode/` directory contains development settings and tasks used from the repository root.
+- `Datasets/comprehensive_allergens_dataset.csv`
+- `references/Food_Allergens_Control.pdf`
+- `references/SOURCES.md`
 
-## Data and model files
+No OCR or matching implementation has been committed yet.
 
-Datasets and trained model weights are not stored in Git because they are large and may contain controlled project assets.
+See `Packaged-Food-Recognition/README.md` for component details.
 
-The following file types must not be committed:
+## Technologies used
+
+Technologies currently confirmed in the repository:
+
+- Python 3.10 or later
+- PyTorch
+- Torchvision
+- Pillow
+- DINOv2 ViT-B/14
+- Git and GitHub
+- Visual Studio Code
+
+Additional application, OCR, backend, and mobile technologies should be added after the team confirms the final implementation.
+
+## Launch instructions
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Bodur7/2026-GP1-1.git
+cd 2026-GP1-1
+```
+
+### 2. Create a virtual environment
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+macOS or Linux:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dish-recognition dependencies
+
+```bash
+pip install -r Dish-Recognition/requirements.txt
+```
+
+### 4. Add and verify the dish-recognition checkpoint
+
+Place the verified checkpoint at:
 
 ```text
-.pt
-.pth
-.ckpt
-.safetensors
+Dish-Recognition/models/best_checkpoint.pt
 ```
 
-Datasets and model checkpoints should be shared through the team's approved private storage location. Their versions and hashes should be documented in the relevant component.
+Then run:
 
-## Security and privacy
+```bash
+python Dish-Recognition/scripts/infer_final_food_v2_dinov2.py --checkpoint Dish-Recognition/models/best_checkpoint.pt --verify-only
+```
 
-Do not commit:
+The packaged-food component currently contains data and references only, so it does not yet have a launch command.
 
-- API keys
-- Access tokens
-- Private credentials
-- Personal data
-- Local environment files
-- Unapproved datasets
-- Large model checkpoints
+## Large-file and security policy
 
-Use environment variables or local `.env` files for private configuration. These files are excluded through `.gitignore`.
+Do not commit datasets, model weights, API keys, access tokens, credentials, or private data. Large assets must be shared through the team's approved private storage location.
