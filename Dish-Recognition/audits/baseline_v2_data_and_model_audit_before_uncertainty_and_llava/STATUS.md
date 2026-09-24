@@ -22,6 +22,7 @@
 - The inference script has a Windows CP1252 console-print portability issue; UTF-8 mode works and the model itself is valid.
 - The newly received full-dataset ZIP is incomplete or corrupt at 508,718,801 bytes and cannot be opened.
 - The received MENA selected archive contains 1,339 images but also 1,621 download-error placeholders, so it is not a complete training source.
+- The separately received train/validation/test ZIP files are valid archives but contain only 2,072/76,198, 1,198/3,630, and 1,868/25,853 images. All received images match the manifest; cloud rate limiting and export truncation caused the missing data.
 
 ## Waiting for external assets
 

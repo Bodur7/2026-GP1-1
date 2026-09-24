@@ -23,6 +23,10 @@ python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scri
 
 Never commit machine-specific external asset paths.
 
+## Split ZIP audit
+
+`audit_split_archives.py` opens external train/validation/test ZIP files without extracting them. It decodes and hashes every available image, verifies the manifest split and dimensions, counts cloud download-error placeholders, and reports completeness. Incomplete archives are never accepted for training or evaluation.
+
 ## Received partial MENA archive audit
 
 `audit_received_mena_archives.py` decodes and hashes received MENA image collections, records download-error placeholders, and determines which images are present in the final manifest. It treats the collections as evidence only and never merges them into the baseline dataset.
