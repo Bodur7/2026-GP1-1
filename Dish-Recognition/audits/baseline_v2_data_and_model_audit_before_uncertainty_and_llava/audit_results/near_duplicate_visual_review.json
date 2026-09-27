@@ -1,0 +1,46 @@
+{
+  "automated_candidates": 6,
+  "confirmed_train_test_duplicate_pairs": 5,
+  "rejected_false_positive_pairs": 1,
+  "confirmed_test_fraction": 0.000193401152671,
+  "confirmed_pairs": [
+    {
+      "class_name": "caprese_salad",
+      "train": "train/caprese_salad/266680.jpg",
+      "test": "test/caprese_salad/87213.jpg",
+      "phash_distance": 4
+    },
+    {
+      "class_name": "cheese_plate",
+      "train": "train/cheese_plate/3026695.jpg",
+      "test": "test/cheese_plate/3026694.jpg",
+      "phash_distance": 4
+    },
+    {
+      "class_name": "chicken_quesadilla",
+      "train": "train/chicken_quesadilla/2388429.jpg",
+      "test": "test/chicken_quesadilla/3004094.jpg",
+      "phash_distance": 4
+    },
+    {
+      "class_name": "edamame",
+      "train": "train/edamame/3028728.jpg",
+      "test": "test/edamame/3112981.jpg",
+      "phash_distance": 4
+    },
+    {
+      "class_name": "huevos_rancheros",
+      "train": "train/huevos_rancheros/3361866.jpg",
+      "test": "test/huevos_rancheros/3391374.jpg",
+      "phash_distance": 4
+    }
+  ],
+  "rejected_pairs": [
+    {
+      "train": "train/grilled_cheese_sandwich/103037.jpg",
+      "test": "test/pho/1121706.jpg",
+      "phash_distance": 4,
+      "reason": "Visually unrelated images; perceptual-hash false positive."
+    }
+  ]
+}

@@ -9,5 +9,10 @@ Generated reports belong here and never replace `reports/baseline_121/`.
 - `mena12_test_reproduction.json`: per-class, Top-k, confusion, and confidence results for the reproduced 523-image MENA-12 test subset.
 - `mena_review_model_agreement.json`: diagnostic agreement with unverified labels in the 91-image cleaning-review collection.
 - `received_split_archives_audit.json`: integrity, completeness, and manifest matching for separately downloaded train/validation/test ZIP files.
+- `dataset_image_audit_train.json`: complete train split decode, SHA-256, dimension, EXIF, and resolution audit.
+- `dataset_image_audit_val.json`: complete validation split decode, SHA-256, dimension, EXIF, and resolution audit.
+- `dataset_image_audit_test.json`: complete test split decode, SHA-256, dimension, EXIF, and resolution audit.
+- `near_duplicate_leakage_audit.json`: complete cross-split pHash candidate search through Hamming distance 4.
+- `near_duplicate_visual_review.json`: visual decisions for all six automated near-duplicate candidates.
 
-Image integrity, prediction, calibration, and OOD reports will be generated after the complete external datasets are available. Large per-image prediction files remain outside Git.
+Image integrity is complete. Prediction, calibration, and OOD reports remain pending. Large per-image prediction files remain outside Git.

@@ -6,10 +6,12 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
+from PIL import Image, ImageOps
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 
@@ -18,6 +20,16 @@ AUDIT_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = AUDIT_DIR.parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from infer_final_food_v2_dinov2 import load_checkpoint, make_transform  # noqa: E402
+
+
+def legacy_loader(path: str):
+    with Image.open(path) as image:
+        return image.convert("RGB")
+
+
+def exif_corrected_loader(path: str):
+    with Image.open(path) as image:
+        return ImageOps.exif_transpose(image).convert("RGB")
 
 
 def choose_device(requested: str) -> torch.device:
@@ -41,10 +53,21 @@ def main() -> int:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--device", default="auto")
+    parser.add_argument("--limit", type=int, help="Process only the first N images for benchmarking")
+    parser.add_argument(
+        "--exif-transpose",
+        action="store_true",
+        help="Apply EXIF orientation before model preprocessing (off preserves legacy baseline behavior)",
+    )
     args = parser.parse_args()
 
     model, classes, preprocessing, _ = load_checkpoint(args.checkpoint)
-    dataset = ImageFolder(args.images, transform=make_transform(preprocessing), allow_empty=True)
+    dataset = ImageFolder(
+        args.images,
+        transform=make_transform(preprocessing),
+        loader=exif_corrected_loader if args.exif_transpose else legacy_loader,
+        allow_empty=True,
+    )
     expected_mapping = {name: index for index, name in enumerate(classes)}
     if args.mode == "in-domain" and dataset.class_to_idx != expected_mapping:
         missing = sorted(set(expected_mapping) - set(dataset.class_to_idx))
@@ -59,6 +82,12 @@ def main() -> int:
         )
     else:
         source_to_checkpoint = None
+    if args.limit is not None:
+        if args.limit < 1:
+            parser.error("--limit must be at least 1")
+        dataset.samples = dataset.samples[: args.limit]
+        dataset.imgs = dataset.samples
+        dataset.targets = [label for _, label in dataset.samples]
 
     device = choose_device(args.device)
     model.to(device).eval()
@@ -69,6 +98,7 @@ def main() -> int:
     batches = []
     targets = []
     processed = 0
+    started = time.perf_counter()
     with torch.inference_mode():
         for batch_index, (images, labels) in enumerate(loader, start=1):
             batches.append(model(images.to(device, non_blocking=True)).cpu().numpy().astype(np.float32))
@@ -78,6 +108,7 @@ def main() -> int:
             processed += len(labels)
             if batch_index == 1 or processed == len(dataset) or processed % 100 < len(labels):
                 print(f"Processed {processed:,}/{len(dataset):,} images", flush=True)
+    inference_seconds = time.perf_counter() - started
     logits = np.concatenate(batches) if batches else np.empty((0, len(classes)), dtype=np.float32)
     target_array = np.concatenate(targets) if targets else np.empty((0,), dtype=np.int64)
     relative_paths = np.asarray(
@@ -89,6 +120,9 @@ def main() -> int:
         "checkpoint_filename": args.checkpoint.name,
         "samples": len(dataset),
         "device": str(device),
+        "exif_transpose": args.exif_transpose,
+        "inference_seconds": inference_seconds,
+        "images_per_second": len(dataset) / inference_seconds if inference_seconds else None,
         "note": "Paths are relative. This file contains model outputs and must remain outside normal Git.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

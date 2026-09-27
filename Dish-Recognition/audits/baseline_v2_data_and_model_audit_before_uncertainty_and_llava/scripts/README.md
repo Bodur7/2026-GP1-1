@@ -38,12 +38,27 @@ After the complete dataset is available, this script decodes every image, option
 ```bash
 python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scripts/audit_dataset_images.py \
   --dataset /path/to/final_food_dataset_v2 \
-  --verify-hashes
+  --verify-hashes \
+  --splits train val test \
+  --workers 4
+```
+
+`--splits` permits independent train/validation/test reports. `--workers` enables bounded concurrent reads for a cloud-synced dataset. The audit distinguishes true dimension mismatches from dimensions that match after EXIF orientation and records malformed metadata warnings without treating successfully decoded pixels as corrupt.
+
+## Near-duplicate leakage audit
+
+`audit_near_duplicate_leakage.py` uses the verified 64-bit pHashes in the committed manifest to find cross-split candidates within a configurable Hamming distance. Its segmented index is complete for the chosen threshold and avoids an all-pairs scan. Candidates still require visual review.
+
+```bash
+python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scripts/audit_near_duplicate_leakage.py \
+  --threshold 4
 ```
 
 ## Prediction export and uncertainty analysis
 
 `export_predictions.py` runs the unchanged baseline and stores per-image logits outside Git. Export validation and test separately. It supports a subset of known classes using `--mode partial-in-domain` and a grouped OOD directory using `--mode ood`.
+
+The optional `--limit` argument supports runtime benchmarking before a full CPU export. `--exif-transpose` enables the corrected user-upload preprocessing experiment; leaving it off preserves the historical baseline loader behavior.
 
 `analyze_uncertainty.py` fits temperature scaling and selects a confidence threshold using validation only. It then reports fixed-policy test accuracy/coverage and OOD rejection. Test and OOD data never select the threshold.
 

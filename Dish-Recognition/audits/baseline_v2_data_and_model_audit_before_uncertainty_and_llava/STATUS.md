@@ -11,6 +11,12 @@
 - The user-facing Accept / Clarify / Abstain protocol and the decision gate for an `other` experiment are documented.
 - All 523 available MENA-12 test images were reproduced with the protected checkpoint: 97.7055% Top-1 and 100% Top-3/Top-5. Per-class correct counts match the committed report.
 - The received partial MENA collections were decoded and matched against the final manifest without modifying the dataset.
+- The complete 105,681-image dataset was audited read-only: all paths exist, all images decode, every SHA-256 matches the committed manifest, and there are no true dimension mismatches.
+- Three EXIF-orientation cases, three truncated EXIF metadata warnings, five tiny Kunafa images, and 7,660 images below the 336-pixel input size on at least one side were identified for targeted analysis.
+- A complete cross-split pHash search through Hamming distance 4 found six candidates. Visual review confirmed five same-class train/test near-duplicate pairs (0.0193% of test) and rejected one cross-class false positive.
+- Visual review confirmed that the five sub-32-pixel Kunafa files are unusably thin source-image strips. They remain in the protected baseline but must be excluded or replaced in a corrected dataset version and sensitivity analysis.
+- Low-resolution images are strongly source/class concentrated: eight Arabic/MENA classes have 88.8%–93.5% of images below the 336-pixel input size. Performance and calibration must be stratified by resolution and source group before approving retraining or thresholds.
+- The protected training, evaluation, inference, and prediction-export loading paths do not apply EXIF orientation. Only three baseline images are affected, but the new user-upload pipeline must normalize EXIF before preprocessing.
 
 ## Interim findings requiring action
 
@@ -20,22 +26,22 @@
 - Existing reports lack per-image logits, so calibration and abstention performance are not yet measurable.
 - No representative OOD set is available, so neither an unknown threshold nor a 122nd `other` class is approved.
 - The inference script has a Windows CP1252 console-print portability issue; UTF-8 mode works and the model itself is valid.
-- The newly received full-dataset ZIP is incomplete or corrupt at 508,718,801 bytes and cannot be opened.
+- The earlier browser-exported full-dataset ZIP remains incomplete or corrupt, but it has been superseded by the fully synchronized OneDrive dataset.
 - The received MENA selected archive contains 1,339 images but also 1,621 download-error placeholders, so it is not a complete training source.
 - The separately received train/validation/test ZIP files are valid archives but contain only 2,072/76,198, 1,198/3,630, and 1,868/25,853 images. All received images match the manifest; cloud rate limiting and export truncation caused the missing data.
 
 ## Waiting for external assets
 
-- Complete `final_food_dataset_v2/train`, `val`, and `test` image directories
 - A documented external/OOD evaluation set grouped by failure type
 
-## Next execution after images arrive
+## Next execution
 
-1. Verify every dataset path, image decode, dimension, and SHA-256.
+1. Complete exact and near-duplicate leakage analysis on the verified images.
 2. Visually review all tiny files and prioritized confusion samples.
-3. Export validation logits and fit calibration/thresholds without test access.
-4. Export test and OOD logits and evaluate the frozen policy.
-5. Decide among no model change, data cleanup plus fine-tuning, or a separate 122-class experiment.
-6. Apply the LLaVA readiness gate only after the classifier decision layer passes.
+3. Verify loader handling of EXIF orientation and measure low-resolution performance.
+4. Export validation logits and fit calibration/thresholds without test access.
+5. Export test and OOD logits and evaluate the frozen policy.
+6. Decide among no model change, data cleanup plus fine-tuning, or a separate 122-class experiment.
+7. Apply the LLaVA readiness gate only after the classifier decision layer passes.
 
 No retraining has been run and no protected baseline file has been changed.

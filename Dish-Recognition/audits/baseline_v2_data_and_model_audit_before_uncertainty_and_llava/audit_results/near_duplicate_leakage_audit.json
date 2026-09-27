@@ -1,0 +1,104 @@
+{
+  "status": "review_required",
+  "manifest_rows": 105681,
+  "phash_bits": 64,
+  "maximum_hamming_distance": 4,
+  "candidate_comparisons_including_segment_repeats": 2974529,
+  "cross_split_candidate_pairs": 6,
+  "same_class_pairs": 5,
+  "cross_class_pairs": 1,
+  "counts_by_distance": {
+    "4": 6
+  },
+  "counts_by_split_pair": {
+    "test-train": 6
+  },
+  "candidate_examples": [
+    {
+      "distance": 4,
+      "same_class": true,
+      "first": {
+        "split": "train",
+        "class_name": "caprese_salad",
+        "path": "train\\caprese_salad\\266680.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "caprese_salad",
+        "path": "test\\caprese_salad\\87213.jpg"
+      }
+    },
+    {
+      "distance": 4,
+      "same_class": true,
+      "first": {
+        "split": "train",
+        "class_name": "cheese_plate",
+        "path": "train\\cheese_plate\\3026695.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "cheese_plate",
+        "path": "test\\cheese_plate\\3026694.jpg"
+      }
+    },
+    {
+      "distance": 4,
+      "same_class": true,
+      "first": {
+        "split": "train",
+        "class_name": "chicken_quesadilla",
+        "path": "train\\chicken_quesadilla\\2388429.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "chicken_quesadilla",
+        "path": "test\\chicken_quesadilla\\3004094.jpg"
+      }
+    },
+    {
+      "distance": 4,
+      "same_class": true,
+      "first": {
+        "split": "train",
+        "class_name": "edamame",
+        "path": "train\\edamame\\3028728.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "edamame",
+        "path": "test\\edamame\\3112981.jpg"
+      }
+    },
+    {
+      "distance": 4,
+      "same_class": true,
+      "first": {
+        "split": "train",
+        "class_name": "huevos_rancheros",
+        "path": "train\\huevos_rancheros\\3361866.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "huevos_rancheros",
+        "path": "test\\huevos_rancheros\\3391374.jpg"
+      }
+    },
+    {
+      "distance": 4,
+      "same_class": false,
+      "first": {
+        "split": "train",
+        "class_name": "grilled_cheese_sandwich",
+        "path": "train\\grilled_cheese_sandwich\\103037.jpg"
+      },
+      "second": {
+        "split": "test",
+        "class_name": "pho",
+        "path": "test\\pho\\1121706.jpg"
+      }
+    }
+  ],
+  "examples_truncated": false,
+  "interpretation": "pHash candidates require visual review. A small Hamming distance is evidence of visual similarity, not automatic proof that two labeled food images are duplicates."
+}
