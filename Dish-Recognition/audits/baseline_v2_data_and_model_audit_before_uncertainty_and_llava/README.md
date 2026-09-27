@@ -49,6 +49,28 @@ baseline_v2_data_and_model_audit_before_uncertainty_and_llava/
 
 Each numbered directory has its own README or findings documents. `audit_results/README.md` explains every generated compact result. `scripts/README.md` explains what each program does and how it is used without committing local asset paths.
 
+## Work completed so far
+
+- Verified the protected checkpoint SHA-256, DINOv2 ViT-B/14 architecture, 121-class order, preprocessing metadata, and strict load compatibility.
+- Verified all 105,681 dataset images read-only against the committed manifest: no missing files, decode failures, hash mismatches, or true dimension mismatches.
+- Identified five unusably thin Kunafa images, three EXIF-orientation cases, three metadata warnings, and 7,660 images below the 336-pixel input size on at least one side.
+- Completed a full cross-split pHash search and visual review: five same-photo train/test leaks are confirmed and one automated cross-class candidate is rejected as a false positive.
+- Reproduced the available 523-image MENA-12 test subset at 97.7055% Top-1 and 100% Top-3/Top-5.
+- Reproduced all 3,630 validation images at 96.9972% Top-1, 99.0909% Top-3, and 99.3939% Top-5.
+- Selected validation-only temperature `0.73`, improving 15-bin ECE from 6.1250% to 0.4983% and NLL from 0.18146 to 0.13582.
+- Compared five validation-only acceptance policies. The leading provisional candidate uses threshold `0.8599`, gives 94.19% direct-answer coverage, 99.01% selective accuracy, and detects 68.81% of validation errors.
+- Measured a validation Top-1 gap between the 20 Arabic/MENA classes (89.833%) and the 101 Food-101 classes (98.416%). Resolution-controlled results show that low resolution alone does not explain this gap.
+- Started the one-time full test logit export required to evaluate the frozen calibration/threshold, exclude the five leaked test files in a clean metric, and define the later automated LLaVA review band. This does not retrain or alter the checkpoint.
+
+## Current and next work
+
+1. Finish the full test prediction export and validate its structure.
+2. Apply validation-selected temperature `0.73` and threshold `0.8599` without test tuning.
+3. Report historical and de-leaked test metrics, selective prediction, MENA/Food-101 behavior, and Top-3/Top-5 evidence.
+4. Build and evaluate a grouped OOD set before setting an Unknown threshold or approving an `Other` experiment.
+5. Compare Top-3, Top-5, and dynamic Top-k only inside the automated LLaVA review band; the user is not asked to choose a class.
+6. Run a separate targeted data/fine-tuning experiment only if the evidence shows it is necessary.
+
 ## Protection boundaries
 
 - Do not edit the baseline files in `scripts/`, `configs/`, or `reports/baseline_121/`.
