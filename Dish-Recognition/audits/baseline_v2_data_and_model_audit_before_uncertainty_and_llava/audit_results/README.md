@@ -16,5 +16,6 @@ Generated reports belong here and never replace `reports/baseline_121/`.
 - `near_duplicate_visual_review.json`: visual decisions for all six automated near-duplicate candidates.
 - `validation_prediction_summary.json`: complete validation Top-k, per-class, confusion, confidence, and per-error summary.
 - `validation_uncertainty_target_097.json`, `098.json`, `0985.json`, `099.json`, and `0995.json`: validation-only temperature and acceptance-policy comparisons.
+- `frozen_policy_test_results.json`: validated full-test export shape, validation-frozen policy results, de-leaked sensitivity metrics, MENA/Food-101 metrics, review-band Top-3/Top-5 evidence, and confusion pairs.
 
-Image integrity and validation prediction/calibration analysis are complete. Frozen-policy test and OOD reports remain pending. Large per-image prediction files remain outside Git.
+Image integrity, validation calibration, and frozen-policy test analysis are complete. Grouped OOD analysis remains pending. Large per-image prediction files remain outside Git.

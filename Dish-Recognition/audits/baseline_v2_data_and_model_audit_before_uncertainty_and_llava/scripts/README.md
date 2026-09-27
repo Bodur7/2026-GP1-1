@@ -62,6 +62,11 @@ The optional `--limit` argument supports runtime benchmarking before a full CPU 
 
 `analyze_uncertainty.py` fits temperature scaling and selects a confidence threshold using validation only. It reports Top-1/Top-3/Top-5, calibration, coverage, selective accuracy, error detection, OOD rejection, and 95% Wilson confidence intervals. Test and OOD data never select the threshold.
 
+`evaluate_frozen_test_policy.py` validates a complete prediction NPZ and applies
+an explicitly supplied validation-selected temperature and threshold. It also
+supports exact leakage exclusions and reports subgroup and review-band evidence;
+it never selects policy values from test.
+
 ```bash
 python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scripts/export_predictions.py \
   --checkpoint /path/to/best_checkpoint.pt --images /dataset/val --output /local/val_logits.npz

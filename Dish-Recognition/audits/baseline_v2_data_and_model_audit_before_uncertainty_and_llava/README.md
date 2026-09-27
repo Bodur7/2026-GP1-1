@@ -61,15 +61,16 @@ Each numbered directory has its own README or findings documents. `audit_results
 - Compared five validation-only acceptance policies. The leading provisional candidate uses threshold `0.8599`, gives 94.19% direct-answer coverage, 99.01% selective accuracy, and detects 68.81% of validation errors.
 - Measured a validation Top-1 gap between the 20 Arabic/MENA classes (89.833%) and the 101 Food-101 classes (98.416%). Resolution-controlled results show that low resolution alone does not explain this gap.
 - Started the one-time full test logit export required to evaluate the frozen calibration/threshold, exclude the five leaked test files in a clean metric, and define the later automated LLaVA review band. This does not retrain or alter the checkpoint.
+- Completed and validated the 25,853-image full test export. CPU/FP32 reproduction is 94.9986% Top-1, 98.5998% Top-3, and 99.1452% Top-5; the tiny difference from the committed CUDA/FP16 report is three Top-1 decisions and one Top-5 decision.
+- Applied validation-frozen `T=0.73` and threshold `0.8599` without test tuning. After excluding five confirmed leaks, coverage is 90.7382%, selective accuracy is 98.4054%, and error detection is 71.0750%.
+- Measured Top-3/Top-5 only as candidate-recall evidence in the 2,394-image review band: 89.39% versus 93.94%. LLaVA selection accuracy and OOD rejection are still unmeasured.
 
 ## Current and next work
 
-1. Finish the full test prediction export and validate its structure.
-2. Apply validation-selected temperature `0.73` and threshold `0.8599` without test tuning.
-3. Report historical and de-leaked test metrics, selective prediction, MENA/Food-101 behavior, and Top-3/Top-5 evidence.
-4. Build and evaluate a grouped OOD set before setting an Unknown threshold or approving an `Other` experiment.
-5. Compare Top-3, Top-5, and dynamic Top-k only inside the automated LLaVA review band; the user is not asked to choose a class.
-6. Run a separate targeted data/fine-tuning experiment only if the evidence shows it is necessary.
+1. Build and evaluate a grouped OOD set before setting an Unknown threshold or approving an `Other` experiment.
+2. Correct confirmed leaks and unusable Kunafa strips only in a new dataset version and measure a targeted sensitivity experiment.
+3. Compare Top-3, Top-5, and dynamic Top-k only inside the automated LLaVA review band; the user is not asked to choose a class.
+4. Run a separate targeted data/fine-tuning experiment only if the evidence shows it is necessary.
 
 ## Protection boundaries
 

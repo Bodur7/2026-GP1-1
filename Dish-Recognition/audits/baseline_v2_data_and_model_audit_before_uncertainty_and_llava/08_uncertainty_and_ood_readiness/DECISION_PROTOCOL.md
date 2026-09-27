@@ -15,14 +15,16 @@ The application must not present an unsupported food label as a fact. The baseli
 
 The test set must never select temperature, thresholds, prompts, or hyperparameters.
 
-## Proposed user-facing decisions
+## Proposed automated decisions
 
 The final numeric boundaries will come from validation results; they are not hard-coded in advance.
 
 - **Accept:** show the Top-1 food when calibrated confidence is above the validated acceptance threshold.
-- **Clarify:** when evidence is intermediate, show up to three materially plausible candidates and ask the user to choose or provide another image. Do not cycle through all five predictions as if each is equally credible.
-- **Abstain:** for low confidence, likely OOD, severe image-quality failure, or user rejection of all candidates, state that the food could not be identified reliably. Request a clearer image or a text description.
-- **LLaVA review:** later, LLaVA may describe visible evidence or help ask a clarification question. It must not silently override the classifier or turn a rejected unknown into a confident 121-class label.
+- **Review:** when evidence is intermediate, pass a constrained Top-k candidate set and classifier evidence to the later LLaVA stage. The application, not the user, resolves the case.
+- **Abstain:** for low confidence, likely OOD, or severe image-quality failure, state that the food could not be identified reliably. Do not force one of the 121 labels.
+- **LLaVA review:** later, LLaVA may select one classifier-supported candidate or return Unknown. It must not freely invent a different dish, silently override the decision boundary, or convert a rejected OOD case into a confident known label.
+
+Top-3, Top-5, and dynamic Top-k must be compared on the same frozen review band. The final choice is based on end-to-end selection accuracy, error rate, latency, and Unknown behavior—not on oracle Top-k inclusion alone.
 
 ## Required OOD groups
 

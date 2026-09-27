@@ -76,6 +76,7 @@ The `train`, `val`, and `test` images and `.pt` weights remain outside GitHub. T
 | --- | --- |
 | `README.md` | Defines baseline reproduction without training or parameter changes. |
 | `MENA12_TEST_REPRODUCTION.md` | Reproduces the 523-image MENA-12 subset with Top-1/2/3/5 and per-class results. |
+| `FULL_TEST_REPRODUCTION.md` | Reproduces the full test split, compares CPU/FP32 with the preserved CUDA/FP16 report, and reports de-leaked sensitivity. |
 
 ### `07_error_analysis_and_improvement/`
 
@@ -85,6 +86,7 @@ The `train`, `val`, and `test` images and `.pt` weights remain outside GitHub. T
 | `EXIF_LOADER_FINDINGS.md` | Documents missing EXIF transpose in protected loaders and the corrected deployment requirement. |
 | `MENA12_ERROR_REVIEW.md` | Reviews MENA-subset errors, confusion patterns, confidence behavior, and targeted actions. |
 | `VALIDATION_ERROR_ANALYSIS.md` | Summarizes full validation errors, weakest classes, the MENA/Food-101 gap, and ordered improvement experiments. |
+| `FULL_TEST_ERROR_ANALYSIS.md` | Summarizes full-test groups and confusions and quantifies Top-3 versus Top-5 in the review band. |
 
 ### `08_uncertainty_and_ood_readiness/`
 
@@ -93,6 +95,7 @@ The `train`, `val`, and `test` images and `.pt` weights remain outside GitHub. T
 | `README.md` | Entry point for calibration, selective prediction, OOD, and Unknown readiness. |
 | `DECISION_PROTOCOL.md` | Defines validation-only selection and automated `Accept / Review / Unknown / Invalid Image` behavior. |
 | `VALIDATION_CALIBRATION_FINDINGS.md` | Documents Top-k, temperature `0.73`, calibration improvement, threshold comparisons, and the provisional `0.8599` acceptance threshold. |
+| `FROZEN_POLICY_TEST_FINDINGS.md` | Applies the validation-frozen policy to independent test and states the remaining OOD gate. |
 
 ### `09_other_class_decision/`
 
@@ -135,12 +138,14 @@ The `train`, `val`, and `test` images and `.pt` weights remain outside GitHub. T
 | `export_predictions.py` | Runs the protected checkpoint and saves per-image logits, targets, relative paths, classes, loader mode, and timing outside Git. |
 | `summarize_prediction_export.py` | Converts local logits into compact Top-k, per-class, confusion, confidence, and per-error JSON. |
 | `analyze_uncertainty.py` | Fits validation-only temperature scaling and evaluates thresholds, coverage, selective accuracy, error detection, OOD acceptance, and confidence intervals. |
+| `evaluate_frozen_test_policy.py` | Validates test logits and applies fixed validation-selected values with leakage, subgroup, and review-band analysis. |
 
 ### `tests/`
 
 | File | Purpose |
 | --- | --- |
 | `test_uncertainty.py` | Tests softmax, temperature effects, tied-threshold selection, Wilson intervals, and Top-3 reporting. |
+| `test_frozen_policy.py` | Tests cross-platform leakage-path matching and Top-3/Top-5 review-band accounting. |
 
 ### `working_copies/`
 
@@ -173,6 +178,7 @@ All files below are inside `audit_results/`. They are reproducible summaries and
 | `validation_uncertainty_target_0985.json` | Validation-only policy targeting 98.5% accepted accuracy. |
 | `validation_uncertainty_target_099.json` | Validation-only policy targeting 99.0% accepted accuracy; the current leading validation candidate. |
 | `validation_uncertainty_target_0995.json` | Validation-only policy targeting 99.5% accepted accuracy. |
+| `frozen_policy_test_results.json` | Full and de-leaked test metrics, fixed-policy behavior, subgroup results, review-band Top-k evidence, and confusions. |
 
 ## External artifacts intentionally not committed
 

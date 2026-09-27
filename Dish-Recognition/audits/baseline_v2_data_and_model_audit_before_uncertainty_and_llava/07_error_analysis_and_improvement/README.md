@@ -5,3 +5,7 @@
 Converts errors into an improvement plan: dataset cleaning, targeted samples, preprocessing changes, limited fine-tuning, or uncertainty handling. Every remedy must have a metric and acceptance test.
 
 `VALIDATION_ERROR_ANALYSIS.md` documents the full 121-class validation result, weakest classes, the measured MENA/Food-101 gap, and the ordered improvement experiments.
+
+`FULL_TEST_ERROR_ANALYSIS.md` documents clean full-test errors, group behavior,
+dominant confusion pairs, and the measured Top-3 versus Top-5 opportunity inside
+the frozen review band.

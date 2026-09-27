@@ -1,0 +1,288 @@
+{
+  "status": "test_complete_ood_pending",
+  "policy_provenance": {
+    "selection_split": "validation_only",
+    "temperature": 0.73,
+    "confidence_threshold": 0.859901957643478,
+    "test_tuning_performed": false
+  },
+  "export_validation": {
+    "samples": 25853,
+    "logits_shape": [
+      25853,
+      121
+    ],
+    "class_count": 121,
+    "all_logits_finite": true,
+    "metadata": {
+      "mode": "in-domain",
+      "images_directory_name": "test",
+      "checkpoint_filename": "best_checkpoint.pt",
+      "samples": 25853,
+      "device": "cpu",
+      "exif_transpose": false,
+      "inference_seconds": 22494.245680499997,
+      "images_per_second": 1.149316156994394,
+      "note": "Paths are relative. This file contains model outputs and must remain outside normal Git."
+    }
+  },
+  "historical_test_split": {
+    "samples": 25853,
+    "top1_accuracy": 0.949986461919313,
+    "top1_accuracy_95ci": [
+      0.9472619436604109,
+      0.9525772744070687
+    ],
+    "top3_accuracy": 0.985997756546629,
+    "top5_accuracy": 0.9914516690519476,
+    "nll": 0.20169700384812958,
+    "ece_15_bins": 0.006438839452022577,
+    "mean_confidence": 0.9550287706103632,
+    "threshold": 0.859901957643478,
+    "coverage": 0.9073995281011875,
+    "coverage_95ci": [
+      0.9038053000276514,
+      0.9108727043816605
+    ],
+    "accepted_samples": 23459,
+    "selective_accuracy": 0.9840572914446482,
+    "selective_accuracy_95ci": [
+      0.9823733925765226,
+      0.9855826855421383
+    ],
+    "error_detection_rate": 0.7107501933488012,
+    "error_detection_rate_95ci": [
+      0.6854406055058755,
+      0.734811227355487
+    ]
+  },
+  "de_leaked_test_split": {
+    "samples": 25848,
+    "top1_accuracy": 0.9499767873723306,
+    "top1_accuracy_95ci": [
+      0.9472517571271823,
+      0.9525680888615051
+    ],
+    "top3_accuracy": 0.9859950479727638,
+    "top5_accuracy": 0.9914500154750852,
+    "nll": 0.2017319473485357,
+    "ece_15_bins": 0.006444030483067272,
+    "mean_confidence": 0.9550240169515204,
+    "threshold": 0.859901957643478,
+    "coverage": 0.9073816155988857,
+    "coverage_95ci": [
+      0.9037867298980474,
+      0.910855431417478
+    ],
+    "accepted_samples": 23454,
+    "selective_accuracy": 0.9840538927261875,
+    "selective_accuracy_95ci": [
+      0.9823696382588138,
+      0.9855796097510459
+    ],
+    "error_detection_rate": 0.7107501933488012,
+    "error_detection_rate_95ci": [
+      0.6854406055058755,
+      0.734811227355487
+    ]
+  },
+  "leakage_sensitivity": {
+    "requested_exclusions": [
+      "caprese_salad/87213.jpg",
+      "cheese_plate/3026694.jpg",
+      "chicken_quesadilla/3004094.jpg",
+      "edamame/3112981.jpg",
+      "huevos_rancheros/3391374.jpg"
+    ],
+    "matched_exclusions": [
+      "caprese_salad/87213.jpg",
+      "cheese_plate/3026694.jpg",
+      "chicken_quesadilla/3004094.jpg",
+      "edamame/3112981.jpg",
+      "huevos_rancheros/3391374.jpg"
+    ],
+    "excluded_samples": 5
+  },
+  "groups_on_de_leaked_test": {
+    "mena_20": {
+      "samples": 603,
+      "top1_accuracy": 0.9800995024875622,
+      "top1_accuracy_95ci": [
+        0.9655406032225275,
+        0.9885801009317339
+      ],
+      "top3_accuracy": 1.0,
+      "top5_accuracy": 1.0,
+      "nll": 0.05544210231292817,
+      "ece_15_bins": 0.017201798699251987,
+      "mean_confidence": 0.97125836039354,
+      "threshold": 0.859901957643478,
+      "coverage": 0.9336650082918739,
+      "coverage_95ci": [
+        0.9109298493318637,
+        0.9509097504482377
+      ],
+      "accepted_samples": 563,
+      "selective_accuracy": 0.9982238010657194,
+      "selective_accuracy_95ci": [
+        0.9900083335558,
+        0.9996863884342831
+      ],
+      "error_detection_rate": 0.9166666666666666,
+      "error_detection_rate_95ci": [
+        0.646120088858883,
+        0.9851349055950829
+      ]
+    },
+    "food101_101": {
+      "samples": 25245,
+      "top1_accuracy": 0.9492572786690434,
+      "top1_accuracy_95ci": [
+        0.9464809522130189,
+        0.9518969015587901
+      ],
+      "top3_accuracy": 0.9856605268369975,
+      "top5_accuracy": 0.9912457912457913,
+      "nll": 0.20522621459181048,
+      "ece_15_bins": 0.0066621571828512065,
+      "mean_confidence": 0.9546362447552226,
+      "threshold": 0.859901957643478,
+      "coverage": 0.9067538126361656,
+      "coverage_95ci": [
+        0.9031047551920004,
+        0.9102790998056471
+      ],
+      "accepted_samples": 22891,
+      "selective_accuracy": 0.9837053863964004,
+      "selective_accuracy_95ci": [
+        0.9819822577027191,
+        0.9852661960518363
+      ],
+      "error_detection_rate": 0.7088212334113974,
+      "error_detection_rate_95ci": [
+        0.683347908121322,
+        0.733045878308216
+      ]
+    }
+  },
+  "review_band_on_de_leaked_test": {
+    "definition": "Samples below the validation-selected direct-answer threshold.",
+    "samples": 2394,
+    "fraction_of_test": 0.09261838440111421,
+    "top1_accuracy": 0.616123642439432,
+    "top3_accuracy": 0.8939014202172096,
+    "top5_accuracy": 0.9394319131161236,
+    "top1_errors": 919,
+    "top1_errors_with_truth_in_top3": 665,
+    "top1_errors_with_truth_only_at_rank4_or5": 109,
+    "top1_errors_not_in_top5": 145,
+    "interpretation": "Top-k inclusion is diagnostic evidence only. It does not measure whether LLaVA can select the correct candidate."
+  },
+  "largest_de_leaked_confusion_pairs": [
+    {
+      "true_class": "steak",
+      "predicted_class": "filet_mignon",
+      "count": 34
+    },
+    {
+      "true_class": "filet_mignon",
+      "predicted_class": "steak",
+      "count": 29
+    },
+    {
+      "true_class": "chocolate_mousse",
+      "predicted_class": "chocolate_cake",
+      "count": 18
+    },
+    {
+      "true_class": "apple_pie",
+      "predicted_class": "bread_pudding",
+      "count": 16
+    },
+    {
+      "true_class": "chocolate_cake",
+      "predicted_class": "chocolate_mousse",
+      "count": 15
+    },
+    {
+      "true_class": "prime_rib",
+      "predicted_class": "steak",
+      "count": 15
+    },
+    {
+      "true_class": "steak",
+      "predicted_class": "prime_rib",
+      "count": 15
+    },
+    {
+      "true_class": "dumplings",
+      "predicted_class": "gyoza",
+      "count": 13
+    },
+    {
+      "true_class": "gyoza",
+      "predicted_class": "dumplings",
+      "count": 13
+    },
+    {
+      "true_class": "tuna_tartare",
+      "predicted_class": "beef_tartare",
+      "count": 12
+    },
+    {
+      "true_class": "ice_cream",
+      "predicted_class": "frozen_yogurt",
+      "count": 11
+    },
+    {
+      "true_class": "beef_tartare",
+      "predicted_class": "tuna_tartare",
+      "count": 10
+    },
+    {
+      "true_class": "tuna_tartare",
+      "predicted_class": "ceviche",
+      "count": 9
+    },
+    {
+      "true_class": "cheesecake",
+      "predicted_class": "strawberry_shortcake",
+      "count": 8
+    },
+    {
+      "true_class": "falafel",
+      "predicted_class": "crab_cakes",
+      "count": 8
+    },
+    {
+      "true_class": "pork_chop",
+      "predicted_class": "steak",
+      "count": 8
+    },
+    {
+      "true_class": "bread_pudding",
+      "predicted_class": "apple_pie",
+      "count": 7
+    },
+    {
+      "true_class": "clam_chowder",
+      "predicted_class": "lobster_bisque",
+      "count": 7
+    },
+    {
+      "true_class": "fried_calamari",
+      "predicted_class": "onion_rings",
+      "count": 7
+    },
+    {
+      "true_class": "hamburger",
+      "predicted_class": "pulled_pork_sandwich",
+      "count": 7
+    }
+  ],
+  "limitations": [
+    "This in-domain test does not establish OOD or Unknown rejection performance.",
+    "The threshold remains a candidate policy until grouped OOD evaluation is complete.",
+    "Top-3/Top-5 oracle inclusion does not establish LLaVA candidate-selection accuracy."
+  ]
+}

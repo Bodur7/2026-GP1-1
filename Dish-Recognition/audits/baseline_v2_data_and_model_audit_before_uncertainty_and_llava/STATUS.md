@@ -21,13 +21,18 @@
 - Validation-selected temperature scaling (`T=0.73`) improves ECE from 6.1250% to 0.4983% and NLL from 0.18146 to 0.13582.
 - The leading validation-only 99% accepted-accuracy candidate gives 94.19% direct-answer coverage, 99.01% selective accuracy, and detects 68.81% of validation errors. It is not frozen until test and OOD evaluation.
 - Arabic/MENA validation Top-1 is 89.833%, versus 98.416% for Food-101. Resolution-controlled results show that low resolution alone does not explain this gap.
+- Full test logits are complete and structurally validated for all 25,853 images and 121 classes.
+- CPU/FP32 full-test reproduction is 94.9986% Top-1, 98.5998% Top-3, and 99.1452% Top-5. It differs from the committed CUDA/FP16 report by only three Top-1 and one Top-5 decisions.
+- Excluding the five confirmed leakage files leaves 25,848 images at 94.9977% Top-1, 98.5995% Top-3, and 99.1450% Top-5.
+- The validation-frozen policy reaches 90.7382% clean-test coverage, 98.4054% selective accuracy, and 71.0750% error detection. It does not preserve the 99% validation target and is not production-approved.
+- The clean-test review band contains 2,394 images. Top-3 contains the truth for 89.39% and Top-5 for 93.94%; constrained LLaVA selection remains unevaluated.
 
 ## Interim findings requiring action
 
 - Nine classes have fewer than 30 test images; eleven more have fewer than 100.
 - Five Kunafa images have a recorded side shorter than 32 pixels, including one validation image.
 - The largest reported directional confusion is `steak` to `filet_mignon` with 34 errors.
-- Validation logits and calibration are now available locally; test and OOD logits are still pending.
+- Validation and test logits are available locally; grouped OOD logits are still pending.
 - No representative OOD set is available, so neither an unknown threshold nor a 122nd `other` class is approved.
 - The inference script has a Windows CP1252 console-print portability issue; UTF-8 mode works and the model itself is valid.
 - The earlier browser-exported full-dataset ZIP remains incomplete or corrupt, but it has been superseded by the fully synchronized OneDrive dataset.
@@ -40,11 +45,9 @@
 
 ## Next execution
 
-1. Freeze the validation-selected candidate policy for test evaluation without test-driven adjustment.
-2. Export test logits, report the historical split and the metric excluding five confirmed leaked test images.
-3. Complete pair-aware visual review of the weakest MENA validation classes.
-4. Build or receive a grouped external/OOD set and measure unknown rejection.
-5. Decide among no model change, targeted data cleanup plus limited fine-tuning, or a separate 122-class experiment.
-6. Apply the LLaVA readiness gate only after the classifier decision layer passes.
+1. Complete pair-aware visual review of the weakest MENA validation classes.
+2. Build or receive a grouped external/OOD set and measure unknown rejection.
+3. Decide among no model change, targeted data cleanup plus limited fine-tuning, or a separate 122-class experiment.
+4. Apply the LLaVA readiness gate only after the classifier decision layer passes.
 
 No retraining has been run and no protected baseline file has been changed.
