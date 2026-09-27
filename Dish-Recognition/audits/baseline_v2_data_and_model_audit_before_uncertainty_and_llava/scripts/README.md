@@ -60,7 +60,7 @@ python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scri
 
 The optional `--limit` argument supports runtime benchmarking before a full CPU export. `--exif-transpose` enables the corrected user-upload preprocessing experiment; leaving it off preserves the historical baseline loader behavior.
 
-`analyze_uncertainty.py` fits temperature scaling and selects a confidence threshold using validation only. It then reports fixed-policy test accuracy/coverage and OOD rejection. Test and OOD data never select the threshold.
+`analyze_uncertainty.py` fits temperature scaling and selects a confidence threshold using validation only. It reports Top-1/Top-3/Top-5, calibration, coverage, selective accuracy, error detection, OOD rejection, and 95% Wilson confidence intervals. Test and OOD data never select the threshold.
 
 ```bash
 python audits/baseline_v2_data_and_model_audit_before_uncertainty_and_llava/scripts/export_predictions.py \

@@ -33,6 +33,17 @@ class UncertaintyTests(unittest.TestCase):
         result = MODULE.metrics(logits, targets, 1.0, threshold)
         self.assertGreaterEqual(result["selective_accuracy"], target_accuracy)
 
+    def test_wilson_interval_contains_observed_rate(self):
+        low, high = MODULE.wilson_interval(80, 100)
+        self.assertLessEqual(low, 0.8)
+        self.assertGreaterEqual(high, 0.8)
+
+    def test_metrics_report_top3(self):
+        logits = np.asarray([[3.0, 2.0, 1.0, 0.0]])
+        result = MODULE.metrics(logits, np.asarray([2]), 1.0)
+        self.assertEqual(result["top1_accuracy"], 0.0)
+        self.assertEqual(result["top3_accuracy"], 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

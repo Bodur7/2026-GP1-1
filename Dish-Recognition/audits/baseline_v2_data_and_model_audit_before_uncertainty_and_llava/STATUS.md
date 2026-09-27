@@ -2,7 +2,7 @@
 
 ## Completed
 
-- Protected work is isolated on `audit/baseline-v2-pre-llava-uncertainty`.
+- Protected work is isolated on `audit/dish-recognition-baseline-v2`.
 - Registry, metric, manifest, split-count, and preprocessing consistency checks pass.
 - The available checkpoint SHA-256, architecture, 121-class mapping, preprocessing metadata, classifier-head shape, and strict state-dict load are verified.
 - Static analysis identifies class-level evidence limits, weakest classes, primary confusion pairs, and manifest quality flags.
@@ -17,13 +17,17 @@
 - Visual review confirmed that the five sub-32-pixel Kunafa files are unusably thin source-image strips. They remain in the protected baseline but must be excluded or replaced in a corrected dataset version and sensitivity analysis.
 - Low-resolution images are strongly source/class concentrated: eight Arabic/MENA classes have 88.8%–93.5% of images below the 336-pixel input size. Performance and calibration must be stratified by resolution and source group before approving retraining or thresholds.
 - The protected training, evaluation, inference, and prediction-export loading paths do not apply EXIF orientation. Only three baseline images are affected, but the new user-upload pipeline must normalize EXIF before preprocessing.
+- Full validation inference reproduces 96.9972% Top-1, with 99.0909% Top-3 and 99.3939% Top-5.
+- Validation-selected temperature scaling (`T=0.73`) improves ECE from 6.1250% to 0.4983% and NLL from 0.18146 to 0.13582.
+- The leading validation-only 99% accepted-accuracy candidate gives 94.19% direct-answer coverage, 99.01% selective accuracy, and detects 68.81% of validation errors. It is not frozen until test and OOD evaluation.
+- Arabic/MENA validation Top-1 is 89.833%, versus 98.416% for Food-101. Resolution-controlled results show that low resolution alone does not explain this gap.
 
 ## Interim findings requiring action
 
 - Nine classes have fewer than 30 test images; eleven more have fewer than 100.
 - Five Kunafa images have a recorded side shorter than 32 pixels, including one validation image.
 - The largest reported directional confusion is `steak` to `filet_mignon` with 34 errors.
-- Existing reports lack per-image logits, so calibration and abstention performance are not yet measurable.
+- Validation logits and calibration are now available locally; test and OOD logits are still pending.
 - No representative OOD set is available, so neither an unknown threshold nor a 122nd `other` class is approved.
 - The inference script has a Windows CP1252 console-print portability issue; UTF-8 mode works and the model itself is valid.
 - The earlier browser-exported full-dataset ZIP remains incomplete or corrupt, but it has been superseded by the fully synchronized OneDrive dataset.
@@ -36,12 +40,11 @@
 
 ## Next execution
 
-1. Complete exact and near-duplicate leakage analysis on the verified images.
-2. Visually review all tiny files and prioritized confusion samples.
-3. Verify loader handling of EXIF orientation and measure low-resolution performance.
-4. Export validation logits and fit calibration/thresholds without test access.
-5. Export test and OOD logits and evaluate the frozen policy.
-6. Decide among no model change, data cleanup plus fine-tuning, or a separate 122-class experiment.
-7. Apply the LLaVA readiness gate only after the classifier decision layer passes.
+1. Freeze the validation-selected candidate policy for test evaluation without test-driven adjustment.
+2. Export test logits, report the historical split and the metric excluding five confirmed leaked test images.
+3. Complete pair-aware visual review of the weakest MENA validation classes.
+4. Build or receive a grouped external/OOD set and measure unknown rejection.
+5. Decide among no model change, targeted data cleanup plus limited fine-tuning, or a separate 122-class experiment.
+6. Apply the LLaVA readiness gate only after the classifier decision layer passes.
 
 No retraining has been run and no protected baseline file has been changed.

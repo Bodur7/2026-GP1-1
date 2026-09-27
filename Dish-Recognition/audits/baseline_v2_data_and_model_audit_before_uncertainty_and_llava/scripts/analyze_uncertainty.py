@@ -37,16 +37,33 @@ def ece(probabilities: np.ndarray, targets: np.ndarray, bins: int = 15) -> float
     return float(value)
 
 
+def wilson_interval(successes: int, total: int, z: float = 1.959963984540054) -> list[float] | None:
+    """Return a two-sided 95% Wilson interval for a binomial proportion."""
+    if total == 0:
+        return None
+    proportion = successes / total
+    denominator = 1 + z * z / total
+    centre = (proportion + z * z / (2 * total)) / denominator
+    radius = z * np.sqrt(
+        proportion * (1 - proportion) / total + z * z / (4 * total * total)
+    ) / denominator
+    return [float(max(0, centre - radius)), float(min(1, centre + radius))]
+
+
 def metrics(logits: np.ndarray, targets: np.ndarray, temperature: float, threshold: float | None = None):
     probabilities = softmax(logits, temperature)
     predictions = probabilities.argmax(axis=1)
     confidence = probabilities.max(axis=1)
     correct = predictions == targets
-    top_k = min(5, probabilities.shape[1])
-    top5 = np.argpartition(probabilities, probabilities.shape[1] - top_k, axis=1)[:, -top_k:]
+    order = np.argsort(-probabilities, axis=1)
+    top3 = order[:, : min(3, probabilities.shape[1])]
+    top5 = order[:, : min(5, probabilities.shape[1])]
+    correct_count = int(correct.sum())
     result = {
         "samples": len(targets),
         "top1_accuracy": float(correct.mean()),
+        "top1_accuracy_95ci": wilson_interval(correct_count, len(targets)),
+        "top3_accuracy": float((top3 == targets[:, None]).any(axis=1).mean()),
         "top5_accuracy": float((top5 == targets[:, None]).any(axis=1).mean()),
         "nll": nll(logits, targets, temperature),
         "ece_15_bins": ece(probabilities, targets),
@@ -54,12 +71,19 @@ def metrics(logits: np.ndarray, targets: np.ndarray, temperature: float, thresho
     }
     if threshold is not None:
         accepted = confidence >= threshold
+        accepted_count = int(accepted.sum())
+        accepted_correct = int((correct & accepted).sum())
+        rejected_errors = int((~accepted & ~correct).sum())
+        total_errors = int((~correct).sum())
         result.update({
             "threshold": threshold,
             "coverage": float(accepted.mean()),
-            "accepted_samples": int(accepted.sum()),
+            "coverage_95ci": wilson_interval(accepted_count, len(targets)),
+            "accepted_samples": accepted_count,
             "selective_accuracy": float(correct[accepted].mean()) if accepted.any() else None,
-            "error_detection_rate": float((~accepted & ~correct).sum() / max((~correct).sum(), 1)),
+            "selective_accuracy_95ci": wilson_interval(accepted_correct, accepted_count),
+            "error_detection_rate": float(rejected_errors / max(total_errors, 1)),
+            "error_detection_rate_95ci": wilson_interval(rejected_errors, total_errors),
         })
     return result
 
@@ -118,9 +142,12 @@ def main() -> int:
     if args.ood:
         ood_logits, _ = load_npz(args.ood)
         ood_confidence = softmax(ood_logits, temperature).max(axis=1)
+        accepted = int((ood_confidence >= threshold).sum())
+        total = len(ood_logits)
         result["ood_acceptance"] = {
-            "samples": len(ood_logits),
-            "accepted_as_known_rate": float((ood_confidence >= threshold).mean()),
+            "samples": total,
+            "accepted_as_known_rate": float(accepted / total),
+            "accepted_as_known_rate_95ci": wilson_interval(accepted, total),
             "rejected_or_escalated_rate": float((ood_confidence < threshold).mean()),
         }
     args.output.parent.mkdir(parents=True, exist_ok=True)

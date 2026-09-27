@@ -1,0 +1,52 @@
+{
+  "status": "interim",
+  "selection_rule": "Temperature and confidence threshold selected on validation only.",
+  "temperature": 0.73,
+  "target_accepted_accuracy": 0.97,
+  "confidence_threshold": 0.17386737315156717,
+  "validation_uncalibrated": {
+    "samples": 3630,
+    "top1_accuracy": 0.9699724517906336,
+    "top1_accuracy_95ci": [
+      0.9639045578923854,
+      0.9750466975945039
+    ],
+    "top3_accuracy": 0.990909090909091,
+    "top5_accuracy": 0.9939393939393939,
+    "nll": 0.18146497466419106,
+    "ece_15_bins": 0.061249878856614266,
+    "mean_confidence": 0.9087225729340194
+  },
+  "validation_calibrated_policy": {
+    "samples": 3630,
+    "top1_accuracy": 0.9699724517906336,
+    "top1_accuracy_95ci": [
+      0.9639045578923854,
+      0.9750466975945039
+    ],
+    "top3_accuracy": 0.990909090909091,
+    "top5_accuracy": 0.9939393939393939,
+    "nll": 0.1358198269305444,
+    "ece_15_bins": 0.004982861591547264,
+    "mean_confidence": 0.968861124865539,
+    "threshold": 0.17386737315156717,
+    "coverage": 0.9997245179063361,
+    "coverage_95ci": [
+      0.9984411148622763,
+      0.9999513689907236
+    ],
+    "accepted_samples": 3629,
+    "selective_accuracy": 0.9702397354643152,
+    "selective_accuracy_95ci": [
+      0.9641945214883456,
+      0.9752904625626622
+    ],
+    "error_detection_rate": 0.009174311926605505,
+    "error_detection_rate_95ci": [
+      0.001621331292545096,
+      0.05014562459178324
+    ]
+  },
+  "test_calibrated_policy": null,
+  "ood_acceptance": null
+}

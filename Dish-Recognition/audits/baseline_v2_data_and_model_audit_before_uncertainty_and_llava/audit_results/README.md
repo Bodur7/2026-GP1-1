@@ -14,5 +14,7 @@ Generated reports belong here and never replace `reports/baseline_121/`.
 - `dataset_image_audit_test.json`: complete test split decode, SHA-256, dimension, EXIF, and resolution audit.
 - `near_duplicate_leakage_audit.json`: complete cross-split pHash candidate search through Hamming distance 4.
 - `near_duplicate_visual_review.json`: visual decisions for all six automated near-duplicate candidates.
+- `validation_prediction_summary.json`: complete validation Top-k, per-class, confusion, confidence, and per-error summary.
+- `validation_uncertainty_target_097.json`, `098.json`, `0985.json`, `099.json`, and `0995.json`: validation-only temperature and acceptance-policy comparisons.
 
-Image integrity is complete. Prediction, calibration, and OOD reports remain pending. Large per-image prediction files remain outside Git.
+Image integrity and validation prediction/calibration analysis are complete. Frozen-policy test and OOD reports remain pending. Large per-image prediction files remain outside Git.
