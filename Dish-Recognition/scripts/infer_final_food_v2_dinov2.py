@@ -137,6 +137,11 @@ class DinoClassifier(nn.Module):
     def forward(self, images: Tensor) -> Tensor:
         return self.head(self.backbone(images))
 
+    def forward_with_embedding(self, images: Tensor) -> tuple[Tensor, Tensor]:
+        embedding = self.backbone(images)
+        logits = self.head(embedding)
+        return logits, embedding
+
 
 def choose_device() -> torch.device:
     if torch.backends.mps.is_available():
