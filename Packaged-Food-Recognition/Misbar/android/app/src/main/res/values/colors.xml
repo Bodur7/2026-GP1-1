@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="md_theme_light_primary">#0B57D0</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#D3E3FD</color>
+    <color name="md_theme_light_onPrimaryContainer">#041E49</color>
+    <color name="md_theme_light_surface">#F8F9FA</color>
+    <color name="md_theme_light_onSurface">#1F1F1F</color>
+    <color name="md_theme_light_surfaceVariant">#E1E3E1</color>
+    <color name="md_theme_light_onSurfaceVariant">#444746</color>
+    <color name="md_theme_light_outline">#747775</color>
+    <color name="md_theme_light_card_bg">#FFFFFF</color>
+
+    <color name="md_theme_dark_primary">#A8C7FA</color>
+    <color name="md_theme_dark_onPrimary">#062E6F</color>
+    <color name="md_theme_dark_primaryContainer">#0842A0</color>
+    <color name="md_theme_dark_onPrimaryContainer">#D3E3FD</color>
+    <color name="md_theme_dark_surface">#121316</color>
+    <color name="md_theme_dark_onSurface">#E3E2E6</color>
+    <color name="md_theme_dark_surfaceVariant">#444746</color>
+    <color name="md_theme_dark_onSurfaceVariant">#C4C7C5</color>
+    <color name="md_theme_dark_outline">#8E918F</color>
+    <color name="md_theme_dark_card_bg">#1E1F22</color>
+</resources>
