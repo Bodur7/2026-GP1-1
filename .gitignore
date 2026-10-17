@@ -30,3 +30,19 @@
 **/runs/
 **/wandb/
 **/tensorboard/
+# OOD embedding caches and resumable extraction shards
+*.npz
+*.npy
+**/*.shards/
+
+# Minimal Nonlinear deployment: keep local development and personal outputs out.
+.DS_Store
+**/.venv-*/
+**/*_env/
+**/manual_testing/results/
+*.zip
+*.tar
+*.tar.gz
+/Dish-Recognition/artifacts/ood/
+# Only this verified small final head is distributed in Git.
+!/Dish-Recognition/nonlinear/shared/oe_head.pt
