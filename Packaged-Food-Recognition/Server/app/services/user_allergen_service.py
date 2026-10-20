@@ -46,18 +46,18 @@ def fetch_user_allergens_from_db(
     user_id: str,
     auth_token: Optional[str] = None,
     project_id: Optional[str] = None
-) -> List[str]:
+) -> Optional[List[str]]:
     """
     Extracts the user's saved allergen list directly from the Cloud Firestore database
     under document collection 'users/{user_id}'.
 
-    Supports:
-    1. Firebase Admin SDK if configured on the server.
-    2. Firestore REST API using the user's Firebase Auth ID token.
+    Returns:
+    - List[str] (e.g. [] or ['Dairy allergy']) if successfully retrieved from the database.
+    - None if the database could not be reached or an error occurred.
     """
     if not user_id or not user_id.strip():
         logger.warning("fetch_user_allergens_from_db called with empty user_id.")
-        return []
+        return None
 
     pid = project_id or FIREBASE_PROJECT_ID
 
@@ -76,6 +76,7 @@ def fetch_user_allergens_from_db(
                         f"[Firebase Admin] Successfully extracted {len(allergens)} allergens from DB for user '{user_id}': {allergens}"
                     )
                     return allergens
+                return []
             else:
                 logger.info(f"[Firebase Admin] User doc 'users/{user_id}' does not exist in DB.")
                 return []
@@ -117,13 +118,16 @@ def fetch_user_allergens_from_db(
                 logger.warning(
                     f"[Firestore REST] Unexpected response {response.status} for user '{user_id}'"
                 )
+                return None
     except urllib.error.HTTPError as e:
         logger.warning(
             f"[Firestore REST] HTTP Error {e.code} while fetching allergens for user '{user_id}': {e.reason}"
         )
+        return None
     except Exception as e:
         logger.warning(
             f"[Firestore REST] Error extracting allergens for user '{user_id}': {e}"
         )
+        return None
 
-    return []
+    return None

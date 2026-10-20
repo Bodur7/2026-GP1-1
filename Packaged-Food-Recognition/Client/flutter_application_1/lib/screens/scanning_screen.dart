@@ -48,7 +48,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       final uid = widget.userId ?? user?.uid;
-      final token = await user?.getIdToken();
+      final token = await user?.getIdToken(true);
 
       final result = await widget.scannerService.scanImageBytes(
         widget.imageBytes,
@@ -77,6 +77,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
             builder: (_) => ScanResultScreen(
               result: result,
               imageBytes: widget.imageBytes,
+              userId: widget.userId,
               userAllergens: widget.userAllergens,
               scannerService: widget.scannerService,
             ),

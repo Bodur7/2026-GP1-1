@@ -9,6 +9,7 @@ class AllergenScannerService {
   String baseUrl;
   final http.Client _client;
   static const List<String> candidateBaseUrls = [
+    'http://192.168.1.105:8000',
     'http://127.0.0.1:8000', // Physical Android device over ADB reverse or desktop
     'http://192.168.68.100:8000', // Mac LAN IP
     'http://192.168.1.85:8000', // Alternative router LAN IP
@@ -16,7 +17,7 @@ class AllergenScannerService {
   ];
 
   AllergenScannerService({String? baseUrl, http.Client? client})
-      : baseUrl = baseUrl ?? 'http://127.0.0.1:8000',
+      : baseUrl = baseUrl ?? 'http://192.168.1.105:8000',
         _client = client ?? http.Client();
 
   Future<ScanResult> scanImageBytes(

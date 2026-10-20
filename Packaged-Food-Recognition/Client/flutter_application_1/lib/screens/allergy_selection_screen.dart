@@ -56,6 +56,8 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
   };
 
   bool _isLoadingAllergies = false;
+  bool _isSavingAllergies = false;
+  Future<void>? _pendingSaveTask;
 
   @override
   void initState() {
@@ -71,14 +73,14 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
     setState(() => _isLoadingAllergies = true);
     try {
       final saved = await _allergyService.fetchUserAllergies(user.uid);
-      if (saved.isNotEmpty && mounted) {
+      if (saved != null && mounted) {
         setState(() {
           _selectedAllergens.clear();
           _selectedAllergens.addAll(saved);
         });
       }
     } catch (e) {
-      debugPrint('Failed to load allergies: $e');
+      debugPrint('[AllergySelectionScreen] Failed to load allergies: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoadingAllergies = false);
@@ -93,17 +95,36 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
       } else {
         _selectedAllergens.add(apiKey);
       }
+      _isSavingAllergies = true;
     });
 
     final user = _authService.currentUser;
     if (user != null) {
+      final task = _allergyService.saveUserAllergies(
+        user.uid,
+        _selectedAllergens.toList(),
+      );
+      _pendingSaveTask = task;
       try {
-        await _allergyService.saveUserAllergies(
-          user.uid,
-          _selectedAllergens.toList(),
-        );
+        await task;
       } catch (e) {
-        debugPrint('Failed to persist allergy update: $e');
+        debugPrint('[AllergySelectionScreen] Failed to persist allergy update: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Warning: Failed to save to database ($e)'),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isSavingAllergies = false);
+        }
+      }
+    } else {
+      if (mounted) {
+        setState(() => _isSavingAllergies = false);
       }
     }
   }
@@ -144,6 +165,13 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
   }
 
   Future<void> _proceedToScanner() async {
+    // Ensure any in-flight database save finishes before proceeding to scanning
+    if (_isSavingAllergies && _pendingSaveTask != null) {
+      try {
+        await _pendingSaveTask;
+      } catch (_) {}
+    }
+
     try {
       final String? tempPath =
           await _channel.invokeMethod<String>('openImageCapture');

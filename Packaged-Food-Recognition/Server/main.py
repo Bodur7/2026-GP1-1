@@ -198,14 +198,14 @@ async def scan_image(
                 user_id=user_id.strip(),
                 auth_token=effective_token
             )
-            if db_allergens:
+            if db_allergens is not None:
                 effective_allergens = db_allergens
                 logger.info(f"Successfully extracted {len(effective_allergens)} allergens from database: {effective_allergens}")
             else:
-                logger.info(f"No allergens found in database for user '{user_id}'. Checking fallback.")
+                logger.info(f"Database query could not be completed for user '{user_id}'. Checking fallback.")
 
-        # If user_id wasn't passed or DB returned empty, fallback to client-supplied allergens if available
-        if not effective_allergens and user_allergens:
+        # If user_id wasn't passed or DB query could not be completed, fallback to client-supplied allergens if available
+        if effective_allergens is None and user_allergens:
             try:
                 parsed = json.loads(user_allergens)
                 if isinstance(parsed, list):
@@ -285,11 +285,11 @@ def scan_text(request: ScanTextRequest):
                 user_id=request.user_id.strip(),
                 auth_token=request.auth_token
             )
-            if db_allergens:
+            if db_allergens is not None:
                 effective_allergens = db_allergens
                 logger.info(f"Successfully extracted {len(effective_allergens)} allergens from database: {effective_allergens}")
 
-        if not effective_allergens:
+        if effective_allergens is None:
             effective_allergens = request.user_allergens
 
         # 3. Detect allergens (Comparison)

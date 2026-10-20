@@ -6,8 +6,8 @@ class AllergyService {
 
   CollectionReference get _usersCollection => _firestore.collection('users');
 
-  /// Fetches the user's saved allergies from Firestore
-  Future<List<String>> fetchUserAllergies(String userId) async {
+  /// Fetches the user's saved allergies from Firestore. Returns null if not found/error.
+  Future<List<String>?> fetchUserAllergies(String userId) async {
     try {
       final doc = await _usersCollection.doc(userId).get();
       if (doc.exists && doc.data() != null) {
@@ -16,11 +16,12 @@ class AllergyService {
         if (list != null) {
           return List<String>.from(list);
         }
+        return <String>[];
       }
     } catch (e) {
-      debugPrint('AllergyService.fetchUserAllergies error: $e');
+      debugPrint('[AllergyService] fetchUserAllergies error: $e');
     }
-    return [];
+    return null;
   }
 
   /// Saves or updates the user's selected allergies in Firestore
@@ -30,8 +31,9 @@ class AllergyService {
         'allergies': allergies,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
+      debugPrint('[AllergyService] Successfully persisted ${allergies.length} allergies to Firestore: $allergies');
     } catch (e) {
-      debugPrint('AllergyService.saveUserAllergies error: $e');
+      debugPrint('[AllergyService] saveUserAllergies error: $e');
       rethrow;
     }
   }

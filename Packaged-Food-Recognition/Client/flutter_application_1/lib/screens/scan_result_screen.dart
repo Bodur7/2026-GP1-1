@@ -12,6 +12,7 @@ class ScanResultScreen extends StatelessWidget {
   final ScanResult result;
   final Uint8List imageBytes;
   final List<String> userAllergens;
+  final String? userId;
   final AllergenScannerService scannerService;
 
   static const MethodChannel _channel =
@@ -22,6 +23,7 @@ class ScanResultScreen extends StatelessWidget {
     required this.result,
     required this.imageBytes,
     required this.userAllergens,
+    this.userId,
     required this.scannerService,
   });
 
@@ -43,6 +45,7 @@ class ScanResultScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => ScanningScreen(
                 imageBytes: bytes,
+                userId: userId,
                 userAllergens: userAllergens,
                 scannerService: scannerService,
               ),
@@ -57,6 +60,7 @@ class ScanResultScreen extends StatelessWidget {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) => ImageCaptureScreen(
+          userId: userId,
           userAllergens: userAllergens,
           scannerService: scannerService,
         ),
