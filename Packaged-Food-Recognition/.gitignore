@@ -1,0 +1,18 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Firebase & Google API credentials
+**/*google-services.json
+**/*GoogleService-Info.plist
+**/*service_account*.json
+**/*credentials*.json
+**/*.json.key
+**/allergen-scanner-*.json
