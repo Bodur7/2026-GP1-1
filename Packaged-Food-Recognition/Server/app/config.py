@@ -55,3 +55,7 @@ GOOGLE_CREDENTIALS_SET = bool(
 # Server binding
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
+
+# Firebase Firestore Configuration
+FIREBASE_PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID", "misbar-ebea2")
+

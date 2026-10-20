@@ -13,6 +13,7 @@ class ErrorScreen extends StatelessWidget {
   final ErrorType type;
   final Uint8List imageBytes;
   final List<String> userAllergens;
+  final String? userId;
   final AllergenScannerService scannerService;
 
   static const MethodChannel _channel =
@@ -23,6 +24,7 @@ class ErrorScreen extends StatelessWidget {
     required this.type,
     required this.imageBytes,
     required this.userAllergens,
+    this.userId,
     required this.scannerService,
   });
 
@@ -33,6 +35,7 @@ class ErrorScreen extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => ScanningScreen(
             imageBytes: imageBytes,
+            userId: userId,
             userAllergens: userAllergens,
             scannerService: scannerService,
           ),
@@ -57,6 +60,7 @@ class ErrorScreen extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) => ScanningScreen(
                   imageBytes: bytes,
+                  userId: userId,
                   userAllergens: userAllergens,
                   scannerService: scannerService,
                 ),
@@ -71,6 +75,7 @@ class ErrorScreen extends StatelessWidget {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => ImageCaptureScreen(
+            userId: userId,
             userAllergens: userAllergens,
             scannerService: scannerService,
           ),

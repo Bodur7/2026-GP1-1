@@ -34,7 +34,10 @@ class ScanResponse(BaseModel):
 
 class ScanTextRequest(BaseModel):
     text: str = Field(..., description="Raw packaging text or on-device OCR text to analyze")
-    user_allergens: Optional[List[str]] = Field(default=None, description="Optional list of allergen categories the user is allergic to")
+    user_id: Optional[str] = Field(default=None, description="Optional Firebase User UID to extract allergens directly from database")
+    auth_token: Optional[str] = Field(default=None, description="Optional Firebase ID token for database access")
+    user_allergens: Optional[List[str]] = Field(default=None, description="Optional fallback list of allergen categories")
+
 
 class HealthResponse(BaseModel):
     status: str

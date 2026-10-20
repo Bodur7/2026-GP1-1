@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_header.dart';
 import '../services/allergen_scanner_service.dart';
@@ -10,12 +11,14 @@ import 'error_screen.dart';
 class ScanningScreen extends StatefulWidget {
   final Uint8List imageBytes;
   final List<String> userAllergens;
+  final String? userId;
   final AllergenScannerService scannerService;
 
   const ScanningScreen({
     super.key,
     required this.imageBytes,
     required this.userAllergens,
+    this.userId,
     required this.scannerService,
   });
 
@@ -43,8 +46,14 @@ class _ScanningScreenState extends State<ScanningScreen> {
     });
 
     try {
+      final user = FirebaseAuth.instance.currentUser;
+      final uid = widget.userId ?? user?.uid;
+      final token = await user?.getIdToken();
+
       final result = await widget.scannerService.scanImageBytes(
         widget.imageBytes,
+        userId: uid,
+        authToken: token,
         userAllergens: widget.userAllergens,
       );
 
@@ -56,6 +65,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
             builder: (_) => ErrorScreen(
               type: ErrorType.labelUnreadable,
               imageBytes: widget.imageBytes,
+              userId: widget.userId,
               userAllergens: widget.userAllergens,
               scannerService: widget.scannerService,
             ),
@@ -73,13 +83,15 @@ class _ScanningScreenState extends State<ScanningScreen> {
           ),
         );
       }
-    } catch (_) {
+    } catch (e, stack) {
+      debugPrint('[ScanningScreen] Scan failed: $e\n$stack');
       if (!mounted || _cancelled) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => ErrorScreen(
             type: ErrorType.connectionError,
             imageBytes: widget.imageBytes,
+            userId: widget.userId,
             userAllergens: widget.userAllergens,
             scannerService: widget.scannerService,
           ),

@@ -8,11 +8,13 @@ import 'scanning_screen.dart';
 
 class ImageCaptureScreen extends StatefulWidget {
   final List<String> userAllergens;
+  final String? userId;
   final AllergenScannerService scannerService;
 
   const ImageCaptureScreen({
     super.key,
     required this.userAllergens,
+    this.userId,
     required this.scannerService,
   });
 
@@ -72,6 +74,7 @@ class _ImageCaptureScreenState extends State<ImageCaptureScreen>
           MaterialPageRoute(
             builder: (_) => ScanningScreen(
               imageBytes: bytes,
+              userId: widget.userId,
               userAllergens: widget.userAllergens,
               scannerService: widget.scannerService,
             ),

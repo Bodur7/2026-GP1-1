@@ -4,7 +4,7 @@ import logging
 from contextlib import asynccontextmanager
 from typing import Optional, List
 
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status
+from fastapi import FastAPI, File, UploadFile, Form, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -13,7 +13,8 @@ from app.config import (
     ALLERGEN_DATASET_FILE,
     HOST,
     PORT,
-    GOOGLE_CREDENTIALS_SET
+    GOOGLE_CREDENTIALS_SET,
+    FIREBASE_PROJECT_ID
 )
 from app.models import (
     ScanResponse,
@@ -29,6 +30,7 @@ from app.services.allergen_service import (
     get_keywords_count,
     load_allergen_dataset
 )
+from app.services.user_allergen_service import fetch_user_allergens_from_db
 
 # Logging configuration
 logging.basicConfig(
@@ -122,16 +124,26 @@ def list_allergens():
 @app.post("/scan/image", response_model=ScanResponse, tags=["Scanner"])
 async def scan_image(
     file: UploadFile = File(..., description="Image file of the product label (JPEG, PNG, WEBP)"),
+    user_id: Optional[str] = Form(
+        None,
+        description="Firebase User UID to extract allergens directly from database before comparing"
+    ),
+    auth_token: Optional[str] = Form(
+        None,
+        description="Optional Firebase ID token for database authorization"
+    ),
     user_allergens: Optional[str] = Form(
         None,
-        description="Optional comma-separated list or JSON array of allergen categories the user is allergic to"
-    )
+        description="Optional fallback comma-separated list or JSON array of allergen categories"
+    ),
+    authorization: Optional[str] = Header(None)
 ):
     """
     Upload an image of a food product packaging label.
     1. Runs OCR (Google Cloud Vision or EasyOCR).
     2. Uses Open Food Facts sequence tagging model to extract the ingredient list.
-    3. Cross-references against the allergen dataset and returns structured results.
+    3. Extracts user allergens directly from the database (Firestore) just before comparing.
+    4. Cross-references against the allergen dataset and returns structured results.
     """
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(
@@ -176,22 +188,35 @@ async def scan_image(
                 message="Text was detected, but no food ingredients list was found. Please photograph the 'Ingredients' ('المكونات') section. / تم العثور على نص ولكن لم يتم التعرف على قائمة مكونات غذائية. يرجى تصوير قسم 'المكونات' على المنتج."
             )
 
-        # Parse user allergens filter if passed
-        parsed_user_allergens: Optional[List[str]] = None
-        if user_allergens:
+        # 3. Extract User Allergens from Database JUST BEFORE COMPARING
+        effective_allergens: Optional[List[str]] = None
+        effective_token = auth_token or (authorization.replace("Bearer ", "").strip() if authorization else None)
+
+        if user_id and user_id.strip():
+            logger.info(f"Extracting allergens from database for user UID: '{user_id.strip()}' just before comparing...")
+            db_allergens = fetch_user_allergens_from_db(
+                user_id=user_id.strip(),
+                auth_token=effective_token
+            )
+            if db_allergens:
+                effective_allergens = db_allergens
+                logger.info(f"Successfully extracted {len(effective_allergens)} allergens from database: {effective_allergens}")
+            else:
+                logger.info(f"No allergens found in database for user '{user_id}'. Checking fallback.")
+
+        # If user_id wasn't passed or DB returned empty, fallback to client-supplied allergens if available
+        if not effective_allergens and user_allergens:
             try:
-                # Try parsing as JSON array
                 parsed = json.loads(user_allergens)
                 if isinstance(parsed, list):
-                    parsed_user_allergens = [str(x) for x in parsed]
+                    effective_allergens = [str(x) for x in parsed]
             except Exception:
-                # Fallback to comma-separated
-                parsed_user_allergens = [x.strip() for x in user_allergens.split(",") if x.strip()]
+                effective_allergens = [x.strip() for x in user_allergens.split(",") if x.strip()]
 
-        # 3. Detect Allergens
+        # 4. Detect Allergens (Comparison)
         detections, is_safe = detect_allergens(
             ingredient_text=ingredient_list,
-            user_allergens=parsed_user_allergens
+            user_allergens=effective_allergens
         )
 
         return ScanResponse(
@@ -252,10 +277,25 @@ def scan_text(request: ScanTextRequest):
                 message="Text was provided, but no food ingredients list could be identified. / تم توفير النص ولكن لم يتم التعرف على قائمة مكونات غذائية."
             )
 
-        # 2. Detect allergens
+        # 2. Extract User Allergens from Database JUST BEFORE COMPARING
+        effective_allergens = None
+        if request.user_id and request.user_id.strip():
+            logger.info(f"Extracting allergens from database for user UID: '{request.user_id.strip()}' just before comparing...")
+            db_allergens = fetch_user_allergens_from_db(
+                user_id=request.user_id.strip(),
+                auth_token=request.auth_token
+            )
+            if db_allergens:
+                effective_allergens = db_allergens
+                logger.info(f"Successfully extracted {len(effective_allergens)} allergens from database: {effective_allergens}")
+
+        if not effective_allergens:
+            effective_allergens = request.user_allergens
+
+        # 3. Detect allergens (Comparison)
         detections, is_safe = detect_allergens(
             ingredient_text=ingredient_list,
-            user_allergens=request.user_allergens
+            user_allergens=effective_allergens
         )
 
         return ScanResponse(
