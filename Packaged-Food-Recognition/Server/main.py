@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import asyncio
 from contextlib import asynccontextmanager
 from typing import Optional, List
 
@@ -31,6 +32,7 @@ from app.services.allergen_service import (
     load_allergen_dataset
 )
 from app.services.user_allergen_service import fetch_user_allergens_from_db
+from app.services.quality_service import check_image_quality, QualityServiceError
 
 # Logging configuration
 logging.basicConfig(
@@ -140,10 +142,11 @@ async def scan_image(
 ):
     """
     Upload an image of a food product packaging label.
-    1. Runs OCR (Google Cloud Vision or EasyOCR).
-    2. Uses Open Food Facts sequence tagging model to extract the ingredient list.
-    3. Extracts user allergens directly from the database (Firestore) just before comparing.
-    4. Cross-references against the allergen dataset and returns structured results.
+    1. Checks image quality before OCR or ingredient analysis.
+    2. Runs OCR (Google Cloud Vision or EasyOCR).
+    3. Uses Open Food Facts sequence tagging model to extract the ingredient list.
+    4. Extracts user allergens directly from the database (Firestore) just before comparing.
+    5. Cross-references against the allergen dataset and returns structured results.
     """
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(
@@ -155,6 +158,29 @@ async def scan_image(
         image_bytes = await file.read()
         if len(image_bytes) == 0:
             raise HTTPException(status_code=400, detail="Uploaded image file is empty.")
+
+        # Do not run OCR when the image fails quality checking.
+        try:
+            quality = await asyncio.to_thread(check_image_quality, image_bytes)
+        except QualityServiceError as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from None
+
+        if not quality["accepted"]:
+            return ScanResponse(
+                success=False,
+                status="low_quality",
+                error_title="Image Not Clear / الصورة غير واضحة",
+                is_safe=False,
+                extracted_ocr_text="",
+                ingredient_list="",
+                allergens_detected=[],
+                total_allergens_count=0,
+                ocr_engine="not_run",
+                message=(
+                    "Please retake the label photo in good lighting and keep the camera steady. / "
+                    "يرجى إعادة تصوير الملصق بإضاءة جيدة مع تثبيت الكاميرا."
+                ),
+            )
 
         # 1. OCR Extraction
         ocr_text, ocr_engine = perform_ocr(image_bytes)
@@ -231,6 +257,8 @@ async def scan_image(
             message="Analysis completed successfully."
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.exception("Error processing image scan:")
         raise HTTPException(

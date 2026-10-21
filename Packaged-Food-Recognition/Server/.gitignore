@@ -1,0 +1,4 @@
+credentials/sightengine.json
+.venv/
+.quality-backups/
+__pycache__/
