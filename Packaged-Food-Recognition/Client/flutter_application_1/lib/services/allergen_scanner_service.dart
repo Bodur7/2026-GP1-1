@@ -17,7 +17,7 @@ class AllergenScannerService {
   ];
 
   AllergenScannerService({String? baseUrl, http.Client? client})
-      : baseUrl = baseUrl ?? 'http://192.168.1.105:8000',
+      : baseUrl = baseUrl ?? 'http://192.168.0.152:8000',
         _client = client ?? http.Client();
 
   Future<ScanResult> scanImageBytes(
