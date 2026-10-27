@@ -23,10 +23,10 @@ class TestImageQuality(unittest.TestCase):
 
     @patch("main.check_image_quality")
     def test_scan_image_rejected_when_quality_below_threshold(self, mock_quality):
-        """When Sightengine quality score is below threshold (0.6), image must be rejected as low_quality."""
+        """When Sightengine quality score is below threshold (0.5), image must be rejected as low_quality."""
         mock_quality.return_value = {
             "score": 0.35,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "accepted": False
         }
 
@@ -54,10 +54,10 @@ class TestImageQuality(unittest.TestCase):
     def test_scan_image_proceeds_when_quality_meets_threshold(
         self, mock_quality, mock_ocr, mock_extract, mock_detect, mock_fetch_db
     ):
-        """When Sightengine quality score is >= 0.6, scan proceeds to OCR and allergen analysis."""
+        """When Sightengine quality score is >= 0.5, scan proceeds to OCR and allergen analysis."""
         mock_quality.return_value = {
             "score": 0.85,
-            "threshold": 0.6,
+            "threshold": 0.5,
             "accepted": True
         }
         mock_ocr.return_value = ("Ingredients: Milk, Sugar", "mock_ocr")

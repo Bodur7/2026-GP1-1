@@ -25,7 +25,7 @@ def check_image_quality(image_bytes: bytes) -> dict:
         settings = json.loads(CREDENTIALS_FILE.read_text(encoding="utf-8-sig"))
         api_user = settings.get("api_user", "")
         api_secret = settings.get("api_secret", "")
-        raw_threshold = settings.get("threshold", 0.6)
+        raw_threshold = settings.get("threshold", 0.5)
         if (
             not isinstance(api_user, str) or not api_user.strip()
             or not isinstance(api_secret, str) or not api_secret.strip()
