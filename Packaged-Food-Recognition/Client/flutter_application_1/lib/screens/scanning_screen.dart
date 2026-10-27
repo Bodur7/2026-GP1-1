@@ -54,20 +54,35 @@ class _ScanningScreenState extends State<ScanningScreen> {
         widget.imageBytes,
         userId: uid,
         authToken: token,
-        userAllergens: widget.userAllergens,
       );
 
       if (!mounted || _cancelled) return;
 
       if (result.hasContentError) {
+        final ErrorType errorType = result.isLowQuality
+            ? ErrorType.imageBlurry
+            : ErrorType.labelUnreadable;
+
+        String? title;
+        if (result.isLowQuality && result.errorTitle != null) {
+          title = result.errorTitle!.split('/')[0].trim();
+        }
+
+        String? message;
+        if (result.isLowQuality && result.message != null) {
+          message = result.message!.split('/')[0].trim();
+        }
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ErrorScreen(
-              type: ErrorType.labelUnreadable,
+              type: errorType,
               imageBytes: widget.imageBytes,
               userId: widget.userId,
               userAllergens: widget.userAllergens,
               scannerService: widget.scannerService,
+              customTitle: title,
+              customMessage: message,
             ),
           ),
         );
@@ -84,6 +99,9 @@ class _ScanningScreenState extends State<ScanningScreen> {
           ),
         );
       }
+    } on ScanCancelledException {
+      debugPrint('[ScanningScreen] Active scan result cancelled due to preference mutation.');
+      return;
     } catch (e, stack) {
       debugPrint('[ScanningScreen] Scan failed: $e\n$stack');
       if (!mounted || _cancelled) return;
@@ -111,6 +129,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
             AppHeader(
               onBack: () {
                 _cancelled = true;
+                widget.scannerService.cancelCurrentScan();
                 Navigator.of(context).pop();
               },
             ),

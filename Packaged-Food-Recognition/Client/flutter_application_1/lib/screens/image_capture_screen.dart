@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_header.dart';
 import '../services/allergen_scanner_service.dart';
+import '../services/allergy_service.dart';
 import 'scanning_screen.dart';
 
 class ImageCaptureScreen extends StatefulWidget {
@@ -70,12 +71,15 @@ class _ImageCaptureScreenState extends State<ImageCaptureScreen>
 
         if (!mounted) return;
 
+        final activeAllergens =
+            AllergyService().currentAllergies ?? widget.userAllergens;
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ScanningScreen(
               imageBytes: bytes,
               userId: widget.userId,
-              userAllergens: widget.userAllergens,
+              userAllergens: activeAllergens,
               scannerService: widget.scannerService,
             ),
           ),
@@ -162,7 +166,7 @@ class _ImageCaptureScreenState extends State<ImageCaptureScreen>
                                       borderRadius: BorderRadius.circular(2),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: amberGold.withOpacity(0.7),
+                                          color: amberGold.withValues(alpha: 0.7),
                                           blurRadius: 8,
                                           spreadRadius: 2,
                                         ),
@@ -291,7 +295,7 @@ class _ImageCaptureScreenState extends State<ImageCaptureScreen>
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.12),
+              color: Colors.white.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: iconColor, size: 22),

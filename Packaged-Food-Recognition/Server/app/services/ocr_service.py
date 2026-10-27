@@ -1,7 +1,7 @@
 import os
 import logging
 from typing import Tuple
-from app.config import GOOGLE_CREDENTIALS_SET
+from app.constants import GOOGLE_VISION_CREDENTIALS
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,10 @@ def get_vision_client():
     if _vision_client is not None:
         return _vision_client
 
-    if GOOGLE_CREDENTIALS_SET or os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+    if GOOGLE_VISION_CREDENTIALS.exists():
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(GOOGLE_VISION_CREDENTIALS)
+
+    if os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
         try:
             from google.cloud import vision_v1 as vision
             _vision_client = vision.ImageAnnotatorClient()
@@ -32,7 +35,7 @@ def perform_ocr(image_bytes: bytes) -> Tuple[str, str]:
     client = get_vision_client()
     if client is None:
         raise RuntimeError(
-            "Google Vision client could not be initialized. Please check GOOGLE_APPLICATION_CREDENTIALS."
+            f"Google Vision client could not be initialized. Please check that {GOOGLE_VISION_CREDENTIALS} exists."
         )
 
     last_error = None
@@ -59,4 +62,3 @@ def perform_ocr(image_bytes: bytes) -> Tuple[str, str]:
                 time.sleep(0.5)
 
     raise RuntimeError(f"Google Vision OCR failed: {last_error}") from last_error
-

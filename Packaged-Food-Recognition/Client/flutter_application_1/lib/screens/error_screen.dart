@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import '../widgets/app_header.dart';
 import '../services/allergen_scanner_service.dart';
+import '../services/allergy_service.dart';
 import 'scanning_screen.dart';
 import 'image_capture_screen.dart';
 
-enum ErrorType { labelUnreadable, connectionError }
+enum ErrorType { labelUnreadable, connectionError, imageBlurry }
 
 class ErrorScreen extends StatelessWidget {
   final ErrorType type;
@@ -15,6 +16,8 @@ class ErrorScreen extends StatelessWidget {
   final List<String> userAllergens;
   final String? userId;
   final AllergenScannerService scannerService;
+  final String? customTitle;
+  final String? customMessage;
 
   static const MethodChannel _channel =
       MethodChannel('com.example.misbar/image_capture');
@@ -26,9 +29,14 @@ class ErrorScreen extends StatelessWidget {
     required this.userAllergens,
     this.userId,
     required this.scannerService,
+    this.customTitle,
+    this.customMessage,
   });
 
   Future<void> _handleRetry(BuildContext context) async {
+    final activeAllergens =
+        AllergyService().currentAllergies ?? userAllergens;
+
     if (type == ErrorType.connectionError) {
       // Re-send the same in-memory image without retaking
       Navigator.of(context).pushReplacement(
@@ -36,7 +44,7 @@ class ErrorScreen extends StatelessWidget {
           builder: (_) => ScanningScreen(
             imageBytes: imageBytes,
             userId: userId,
-            userAllergens: userAllergens,
+            userAllergens: activeAllergens,
             scannerService: scannerService,
           ),
         ),
@@ -61,7 +69,7 @@ class ErrorScreen extends StatelessWidget {
                 builder: (_) => ScanningScreen(
                   imageBytes: bytes,
                   userId: userId,
-                  userAllergens: userAllergens,
+                  userAllergens: activeAllergens,
                   scannerService: scannerService,
                 ),
               ),
@@ -76,7 +84,7 @@ class ErrorScreen extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => ImageCaptureScreen(
             userId: userId,
-            userAllergens: userAllergens,
+            userAllergens: activeAllergens,
             scannerService: scannerService,
           ),
         ),
@@ -87,6 +95,27 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUnreadable = type == ErrorType.labelUnreadable;
+    final isBlurry = type == ErrorType.imageBlurry;
+    final isConnection = type == ErrorType.connectionError;
+
+    final IconData iconData = isBlurry
+        ? Icons.blur_on
+        : (isUnreadable ? Icons.local_offer_outlined : Icons.wifi_off);
+
+    final Color badgeBg = isConnection ? AppColors.alertBg : AppColors.tagBeigeBg;
+    final Color iconColor = isConnection ? AppColors.alertSoftRed : AppColors.tagOrange;
+
+    final String titleText = customTitle ??
+        (isBlurry
+            ? 'Image Not Clear'
+            : (isUnreadable ? 'Label Could Not Be Read' : 'Connection Error'));
+
+    final String subtitleText = customMessage ??
+        (isBlurry
+            ? 'The image is too blurry to reliably detect ingredients. Please retake the label photo in good lighting and keep the camera steady.'
+            : (isUnreadable
+                ? 'Ensure even lighting, move closer to the text and keep your camera steady.'
+                : 'We could not complete the analysis. Check your connection and try again.'));
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -101,20 +130,20 @@ class ErrorScreen extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: isUnreadable ? AppColors.tagBeigeBg : AppColors.alertBg,
+                color: badgeBg,
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                isUnreadable ? Icons.local_offer_outlined : Icons.wifi_off,
+                iconData,
                 size: 36,
-                color: isUnreadable ? AppColors.tagOrange : AppColors.alertSoftRed,
+                color: iconColor,
               ),
             ),
             const SizedBox(height: 24),
 
             // Title
             Text(
-              isUnreadable ? 'Label Could Not Be Read' : 'Connection Error',
+              titleText,
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -127,9 +156,7 @@ class ErrorScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
-                isUnreadable
-                    ? 'Ensure even lighting, move closer to the text and keep your camera steady.'
-                    : 'We could not complete the analysis. Check your connection and try again.',
+                subtitleText,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,

@@ -57,12 +57,16 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
 
   bool _isLoadingAllergies = false;
   bool _isSavingAllergies = false;
-  Future<void>? _pendingSaveTask;
+  bool _isNavigatingToScanner = false;
 
   @override
   void initState() {
     super.initState();
     _scannerService = AllergenScannerService();
+    if (_allergyService.currentAllergies != null) {
+      _selectedAllergens.clear();
+      _selectedAllergens.addAll(_allergyService.currentAllergies!);
+    }
     _loadUserAllergiesFromFirestore();
   }
 
@@ -89,8 +93,12 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
   }
 
   Future<void> _toggleAllergen(String apiKey) async {
+    // Invalidate/cancel any active or in-flight scan
+    _scannerService.cancelCurrentScan();
+
+    final willRemove = _selectedAllergens.contains(apiKey);
     setState(() {
-      if (_selectedAllergens.contains(apiKey)) {
+      if (willRemove) {
         _selectedAllergens.remove(apiKey);
       } else {
         _selectedAllergens.add(apiKey);
@@ -100,26 +108,29 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
 
     final user = _authService.currentUser;
     if (user != null) {
-      final task = _allergyService.saveUserAllergies(
-        user.uid,
-        _selectedAllergens.toList(),
-      );
-      _pendingSaveTask = task;
       try {
-        await task;
+        await _allergyService.saveUserAllergies(
+          user.uid,
+          _selectedAllergens.toList(),
+        );
       } catch (e) {
         debugPrint('[AllergySelectionScreen] Failed to persist allergy update: $e');
         if (mounted) {
+          setState(() {
+            _selectedAllergens.clear();
+            _selectedAllergens.addAll(_allergyService.currentAllergies ?? []);
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Warning: Failed to save to database ($e)'),
+              content: Text('Failed to save allergy change ($e). Reverted.'),
+              backgroundColor: AppColors.alertRed,
               duration: const Duration(seconds: 3),
             ),
           );
         }
       } finally {
         if (mounted) {
-          setState(() => _isSavingAllergies = false);
+          setState(() => _isSavingAllergies = _allergyService.isSaving);
         }
       }
     } else {
@@ -165,12 +176,36 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
   }
 
   Future<void> _proceedToScanner() async {
-    // Ensure any in-flight database save finishes before proceeding to scanning
-    if (_isSavingAllergies && _pendingSaveTask != null) {
+    // Prevent concurrent/duplicate navigation attempts while saving or navigating
+    if (_isNavigatingToScanner) return;
+    _isNavigatingToScanner = true;
+
+    // Ensure any in-flight or queued database save finishes and is confirmed by backend
+    if (_isSavingAllergies || _allergyService.isSaving) {
+      setState(() => _isSavingAllergies = true);
       try {
-        await _pendingSaveTask;
-      } catch (_) {}
+        await _allergyService.ensureSaved();
+      } catch (e) {
+        _isNavigatingToScanner = false;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Cannot proceed to scanner: Failed to save allergies ($e). Please retry.'),
+              backgroundColor: AppColors.alertRed,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+        return;
+      } finally {
+        if (mounted) {
+          setState(() => _isSavingAllergies = _allergyService.isSaving);
+        }
+      }
     }
+
+    final latestAllergens =
+        _allergyService.currentAllergies ?? _selectedAllergens.toList();
 
     try {
       final String? tempPath =
@@ -184,33 +219,44 @@ class _AllergySelectionScreenState extends State<AllergySelectionScreen> {
             await file.delete();
           } catch (_) {}
 
-          if (!mounted) return;
+          if (!mounted) {
+            _isNavigatingToScanner = false;
+            return;
+          }
 
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ScanningScreen(
                 imageBytes: bytes,
                 userId: _authService.currentUser?.uid,
-                userAllergens: _selectedAllergens.toList(),
+                userAllergens: latestAllergens,
                 scannerService: _scannerService,
               ),
             ),
-          );
+          ).then((_) {
+            _isNavigatingToScanner = false;
+          });
           return;
         }
       }
     } catch (_) {}
 
-    if (!mounted) return;
+    if (!mounted) {
+      _isNavigatingToScanner = false;
+      return;
+    }
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ImageCaptureScreen(
           userId: _authService.currentUser?.uid,
-          userAllergens: _selectedAllergens.toList(),
+          userAllergens: latestAllergens,
           scannerService: _scannerService,
         ),
       ),
-    );
+    ).then((_) {
+      _isNavigatingToScanner = false;
+    });
   }
 
   @override

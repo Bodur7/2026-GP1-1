@@ -2,7 +2,7 @@ import re
 import csv
 import logging
 from typing import List, Tuple, Optional, Dict
-from app.config import ALLERGEN_DATASET_FILE
+from app.constants import ALLERGEN_DATASET_FILE
 from app.models import AllergenDetection
 
 logger = logging.getLogger(__name__)
@@ -159,7 +159,7 @@ def detect_allergens(
 
     # If user provided personal allergies, is_safe is False only if a personal allergy matches.
     # Otherwise, is_safe is False if any allergen was found.
-    if user_allergens is not None and len(user_allergens) > 0:
+    if user_allergens is not None:
         is_safe = not has_user_allergy_conflict
     else:
         is_safe = len(detections) == 0

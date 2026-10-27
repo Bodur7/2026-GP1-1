@@ -1,91 +1,58 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import '../models/scan_result.dart';
+import 'api_service.dart';
 
+class ScanCancelledException implements Exception {
+  final String message;
+  ScanCancelledException([this.message = 'Scan was cancelled because newer preferences were applied.']);
+  @override
+  String toString() => message;
+}
+
+/// AllergenScannerService manages image and text scanning.
+/// All user allergy preferences are retrieved strictly from Firestore by the backend.
+/// Tracks active scan generations to cancel/discard obsolete in-flight scans.
 class AllergenScannerService {
-  String baseUrl;
-  final http.Client _client;
-  static const List<String> candidateBaseUrls = [
-    'http://192.168.1.105:8000',
-    'http://127.0.0.1:8000', // Physical Android device over ADB reverse or desktop
-    'http://192.168.68.100:8000', // Mac LAN IP
-    'http://192.168.1.85:8000', // Alternative router LAN IP
-    'http://10.0.2.2:8000', // Android emulator loopback
-  ];
+  final ApiService _apiService;
+  int _activeScanId = 0;
 
-  AllergenScannerService({String? baseUrl, http.Client? client})
-      : baseUrl = baseUrl ?? 'http://192.168.0.152:8000',
-        _client = client ?? http.Client();
+  String get baseUrl => _apiService.baseUrl;
+  set baseUrl(String url) => _apiService.baseUrl = url;
+
+  AllergenScannerService({String? baseUrl, http.Client? client, ApiService? apiService})
+      : _apiService = apiService ?? ApiService() {
+    if (baseUrl != null) {
+      _apiService.baseUrl = baseUrl;
+    }
+  }
+
+  /// Invalidate/cancel any in-flight scan requests so their responses are discarded.
+  void cancelCurrentScan() {
+    _activeScanId++;
+  }
 
   Future<ScanResult> scanImageBytes(
     Uint8List imageBytes, {
     String? userId,
     String? authToken,
-    List<String>? userAllergens,
   }) async {
-    // Endpoints to attempt: preferred baseUrl first, followed by fallbacks
-    final endpoints = <String>[
-      baseUrl,
-      ...candidateBaseUrls.where((url) => url != baseUrl),
-    ];
-
-    Object? lastError;
-
-    for (final host in endpoints) {
-      try {
-        final uri = Uri.parse('$host/scan/image');
-        final request = http.MultipartRequest('POST', uri);
-
-        request.files.add(
-          http.MultipartFile.fromBytes(
-            'file',
-            imageBytes,
-            filename: 'label.jpg',
-            contentType: MediaType('image', 'jpeg'),
-          ),
-        );
-
-        if (userId != null && userId.isNotEmpty) {
-          request.fields['user_id'] = userId;
-        }
-        if (authToken != null && authToken.isNotEmpty) {
-          request.fields['auth_token'] = authToken;
-          request.headers['Authorization'] = 'Bearer $authToken';
-        }
-        if (userAllergens != null && userAllergens.isNotEmpty) {
-          request.fields['user_allergens'] = jsonEncode(userAllergens);
-        }
-
-        final streamedResponse = await _client.send(request).timeout(
-              const Duration(seconds: 15),
-            );
-        final response = await http.Response.fromStream(streamedResponse);
-
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-          baseUrl = host; // Remember working endpoint for future scans
-          return await compute(parseScanResult, response.body);
-        } else {
-          throw HttpException(
-            'Server error (${response.statusCode}): ${response.body}',
-            uri: uri,
-          );
-        }
-      } catch (e) {
-        lastError = e;
-        debugPrint('[AllergenScannerService] Failed to connect to $host: $e');
-        if (e is HttpException) {
-          // If server actually responded with an error, do not retry other hosts
-          rethrow;
-        }
-      }
+    final currentId = ++_activeScanId;
+    final result = await _apiService.scanImageBytes(imageBytes);
+    if (currentId != _activeScanId) {
+      throw ScanCancelledException();
     }
-
-    throw lastError ??
-        const SocketException('Could not connect to allergen scanner server.');
+    return result;
   }
 
-  void dispose() => _client.close();
+  Future<ScanResult> scanText(String text) async {
+    final currentId = ++_activeScanId;
+    final result = await _apiService.scanText(text);
+    if (currentId != _activeScanId) {
+      throw ScanCancelledException();
+    }
+    return result;
+  }
+
+  void dispose() => _apiService.dispose();
 }

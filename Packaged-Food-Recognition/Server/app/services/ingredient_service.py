@@ -1,6 +1,6 @@
 import logging
 from typing import Optional
-from app.config import MODEL_PATH
+from app.constants import MODEL_PATH
 
 logger = logging.getLogger(__name__)
 

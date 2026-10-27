@@ -7,9 +7,9 @@ from pathlib import Path
 import requests
 
 
-CREDENTIALS_FILE = (
-    Path(__file__).resolve().parents[2] / "credentials" / "sightengine.json"
-)
+from app.constants import SIGHTENGINE_CREDENTIALS
+
+CREDENTIALS_FILE = SIGHTENGINE_CREDENTIALS
 API_URL = "https://api.sightengine.com/1.0/check.json"
 
 
@@ -25,7 +25,7 @@ def check_image_quality(image_bytes: bytes) -> dict:
         settings = json.loads(CREDENTIALS_FILE.read_text(encoding="utf-8-sig"))
         api_user = settings.get("api_user", "")
         api_secret = settings.get("api_secret", "")
-        raw_threshold = settings.get("threshold", 0.5)
+        raw_threshold = settings.get("threshold", 0.6)
         if (
             not isinstance(api_user, str) or not api_user.strip()
             or not isinstance(api_secret, str) or not api_secret.strip()

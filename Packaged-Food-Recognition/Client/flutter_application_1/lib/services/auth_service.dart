@@ -1,17 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'api_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final ApiService _apiService = ApiService();
 
   User? get currentUser => _auth.currentUser;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
+  /// Returns the current user's Firebase ID token
+  Future<String?> getIdToken([bool forceRefresh = false]) async {
+    return await _auth.currentUser?.getIdToken(forceRefresh);
+  }
+
   /// Creates a new user with email & password, sets display name,
-  /// and initializes their user profile in Firestore
+  /// and initializes their user profile in the database via the FastAPI backend.
   Future<UserCredential> signUp({
     required String name,
     required String email,
@@ -27,14 +32,15 @@ class AuthService {
       if (user != null) {
         await user.updateDisplayName(name.trim());
 
-        // Initialize user document in Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'name': name.trim(),
-          'email': email.trim(),
-          'allergies': <String>[],
-          'createdAt': FieldValue.serverTimestamp(),
-          'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
+        // Initialize user document via FastAPI backend (no direct Firestore calls)
+        try {
+          await _apiService.updateProfile(
+            name: name.trim(),
+            email: email.trim(),
+          );
+        } catch (apiErr) {
+          debugPrint('Notice: Backend profile initialization deferred: $apiErr');
+        }
       }
 
       return credential;
@@ -56,6 +62,16 @@ class AuthService {
       );
     } catch (e) {
       debugPrint('AuthService.signIn error: $e');
+      rethrow;
+    }
+  }
+
+  /// Sends a password reset email via Firebase Authentication
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+    } catch (e) {
+      debugPrint('AuthService.sendPasswordResetEmail error: $e');
       rethrow;
     }
   }

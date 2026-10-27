@@ -1,133 +1,171 @@
 import os
 import json
 import logging
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timezone
 import urllib.request
 import urllib.error
-from typing import List, Optional
 
-from app.config import FIREBASE_PROJECT_ID
+from app.constants import FIREBASE_PROJECT_ID, FIREBASE_CREDENTIALS
+from app.auth import init_firebase_admin
 
 logger = logging.getLogger("allergen_scanner.db")
 
-# Cache or initialize firebase_admin if credentials exist
-_firestore_db = None
-_firebase_initialized = False
+class UserDocumentNotFoundError(Exception):
+    """Raised when the user's Firestore document does not exist."""
+    pass
 
-def _init_firebase_admin():
-    global _firestore_db, _firebase_initialized
-    if _firebase_initialized:
-        return _firestore_db
+class DatabaseUnavailableError(Exception):
+    """Raised when Firestore is unavailable or connection fails."""
+    pass
 
-    try:
-        import firebase_admin
-        from firebase_admin import credentials, firestore
+class InvalidAllergyDataError(Exception):
+    """Raised when the 'allergies' field is missing or not a list."""
+    pass
 
-        # Check if an app is already initialized
-        if not firebase_admin._apps:
-            cred_path = os.getenv("FIREBASE_CREDENTIALS_FILE") or os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-            if cred_path and os.path.isfile(cred_path):
-                # Verify if it has project_id matching FIREBASE_PROJECT_ID or has firebase scope
-                cred = credentials.Certificate(cred_path)
-                firebase_admin.initialize_app(cred, {"projectId": FIREBASE_PROJECT_ID})
-            else:
-                firebase_admin.initialize_app(options={"projectId": FIREBASE_PROJECT_ID})
+_firestore_client = None
 
-        _firestore_db = firestore.client()
-        _firebase_initialized = True
-        logger.info("Firebase Admin Firestore client initialized successfully.")
-        return _firestore_db
-    except Exception as e:
-        logger.debug(f"Firebase Admin SDK not initialized: {e}. Will use Firestore REST API.")
-        _firebase_initialized = True
-        return None
-
-
-def fetch_user_allergens_from_db(
-    user_id: str,
-    auth_token: Optional[str] = None,
-    project_id: Optional[str] = None
-) -> Optional[List[str]]:
+def get_firestore_client():
     """
-    Extracts the user's saved allergen list directly from the Cloud Firestore database
-    under document collection 'users/{user_id}'.
+    Returns the Firestore client from firebase_admin, initializing if needed.
+    """
+    global _firestore_client
+    if _firestore_client is not None:
+        return _firestore_client
 
-    Returns:
-    - List[str] (e.g. [] or ['Dairy allergy']) if successfully retrieved from the database.
-    - None if the database could not be reached or an error occurred.
+    app = init_firebase_admin()
+    if app is not None:
+        try:
+            from firebase_admin import firestore
+            _firestore_client = firestore.client()
+            logger.info("Firestore client initialized successfully.")
+            return _firestore_client
+        except Exception as e:
+            logger.error(f"Failed to get Firestore client from Firebase Admin: {e}")
+
+    return None
+
+def fetch_user_allergens_from_db(user_id: str) -> List[str]:
+    """
+    Extracts the user's saved allergen list directly from Cloud Firestore
+    under document collection 'users/{user_id}'.
+    Raises explicit exceptions on failure so callers never confuse failures with empty lists.
     """
     if not user_id or not user_id.strip():
-        logger.warning("fetch_user_allergens_from_db called with empty user_id.")
+        raise ValueError("fetch_user_allergens_from_db called with empty user_id.")
+
+    db = get_firestore_client()
+    if db is None:
+        raise DatabaseUnavailableError("Firestore client is not available on server.")
+
+    try:
+        doc_ref = db.collection("users").document(user_id.strip())
+        doc = doc_ref.get()
+    except Exception as e:
+        logger.error(f"Firestore query failed for user '{user_id}': {e}")
+        raise DatabaseUnavailableError(f"Firestore query failed: {e}") from e
+
+    if not doc.exists:
+        logger.warning(f"User doc 'users/{user_id}' does not exist in DB.")
+        raise UserDocumentNotFoundError(f"User profile document 'users/{user_id}' not found.")
+
+    data = doc.to_dict() or {}
+    if "allergies" not in data:
+        raise InvalidAllergyDataError(f"User profile 'users/{user_id}' has no 'allergies' field.")
+
+    raw_allergies = data.get("allergies")
+    if not isinstance(raw_allergies, list):
+        raise InvalidAllergyDataError(f"'allergies' field in 'users/{user_id}' is not a list: {type(raw_allergies)}")
+
+    return [str(x) for x in raw_allergies if str(x).strip()]
+
+def save_user_allergens_in_db(user_id: str, allergies: List[str]) -> bool:
+    """
+    Saves or updates the user's selected allergies in Firestore.
+    """
+    if not user_id or not user_id.strip():
+        raise ValueError("save_user_allergens_in_db called with empty user_id.")
+
+    db = get_firestore_client()
+    if db is None:
+        raise DatabaseUnavailableError("Firestore client is not available on server.")
+
+    try:
+        from firebase_admin import firestore
+        doc_ref = db.collection("users").document(user_id.strip())
+        doc_ref.set({
+            "allergies": allergies,
+            "updatedAt": firestore.SERVER_TIMESTAMP,
+        }, merge=True)
+        logger.info(f"Saved {len(allergies)} allergies for user '{user_id}'.")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to save allergies in Firestore for user '{user_id}': {e}")
+        raise DatabaseUnavailableError(f"Failed to save allergies in Firestore: {e}") from e
+
+def get_user_profile_from_db(user_id: str) -> Optional[Dict[str, Any]]:
+    """
+    Retrieves the user profile data (name, email, allergies) for the given user_id.
+    """
+    if not user_id or not user_id.strip():
         return None
 
-    pid = project_id or FIREBASE_PROJECT_ID
-
-    # 1. Try Firebase Admin SDK if available
-    db = _init_firebase_admin()
+    db = get_firestore_client()
     if db is not None:
         try:
-            doc_ref = db.collection("users").document(user_id)
+            doc_ref = db.collection("users").document(user_id.strip())
             doc = doc_ref.get()
             if doc.exists:
                 data = doc.to_dict() or {}
-                raw_allergies = data.get("allergies", [])
-                if isinstance(raw_allergies, list):
-                    allergens = [str(x) for x in raw_allergies if x]
-                    logger.info(
-                        f"[Firebase Admin] Successfully extracted {len(allergens)} allergens from DB for user '{user_id}': {allergens}"
-                    )
-                    return allergens
-                return []
-            else:
-                logger.info(f"[Firebase Admin] User doc 'users/{user_id}' does not exist in DB.")
-                return []
+                return {
+                    "uid": user_id.strip(),
+                    "name": data.get("name"),
+                    "email": data.get("email"),
+                    "allergies": [str(x) for x in data.get("allergies", []) if x]
+                }
+            return {
+                "uid": user_id.strip(),
+                "name": None,
+                "email": None,
+                "allergies": []
+            }
         except Exception as e:
-            logger.warning(f"[Firebase Admin] Query failed for user '{user_id}': {e}. Falling back to REST API.")
+            logger.error(f"Error fetching user profile for '{user_id}': {e}")
+            raise e
 
-    # 2. Query Cloud Firestore REST API
-    url = f"https://firestore.googleapis.com/v1/projects/{pid}/databases/(default)/documents/users/{user_id}"
-    headers = {
-        "Accept": "application/json",
-    }
-    if auth_token and auth_token.strip():
-        token = auth_token.strip()
-        if not token.lower().startswith("bearer "):
-            token = f"Bearer {token}"
-        headers["Authorization"] = token
+    raise RuntimeError("Firestore client is not available on server.")
 
-    try:
-        req = urllib.request.Request(url, headers=headers, method="GET")
-        with urllib.request.urlopen(req, timeout=5) as response:
-            if response.status == 200:
-                body = response.read().decode("utf-8")
-                doc_data = json.loads(body)
-                fields = doc_data.get("fields", {})
+def save_user_profile_in_db(user_id: str, name: Optional[str] = None, email: Optional[str] = None) -> bool:
+    """
+    Creates or updates the user's profile document in Firestore.
+    """
+    if not user_id or not user_id.strip():
+        return False
 
-                # Parse Firestore REST format for array 'allergies'
-                allergies_field = fields.get("allergies", {})
-                array_values = allergies_field.get("arrayValue", {}).get("values", [])
-                allergens = []
-                for val in array_values:
-                    if "stringValue" in val:
-                        allergens.append(val["stringValue"])
+    db = get_firestore_client()
+    if db is not None:
+        try:
+            from firebase_admin import firestore
+            doc_ref = db.collection("users").document(user_id.strip())
+            payload: Dict[str, Any] = {
+                "updatedAt": firestore.SERVER_TIMESTAMP,
+            }
+            if name is not None:
+                payload["name"] = name.strip()
+            if email is not None:
+                payload["email"] = email.strip()
 
-                logger.info(
-                    f"[Firestore REST] Successfully extracted {len(allergens)} allergens from DB for user '{user_id}': {allergens}"
-                )
-                return allergens
-            else:
-                logger.warning(
-                    f"[Firestore REST] Unexpected response {response.status} for user '{user_id}'"
-                )
-                return None
-    except urllib.error.HTTPError as e:
-        logger.warning(
-            f"[Firestore REST] HTTP Error {e.code} while fetching allergens for user '{user_id}': {e.reason}"
-        )
-        return None
-    except Exception as e:
-        logger.warning(
-            f"[Firestore REST] Error extracting allergens for user '{user_id}': {e}"
-        )
-        return None
+            # If document doesn't exist yet, also set createdAt and empty allergies
+            doc = doc_ref.get()
+            if not doc.exists:
+                payload["createdAt"] = firestore.SERVER_TIMESTAMP
+                payload["allergies"] = []
 
-    return None
+            doc_ref.set(payload, merge=True)
+            logger.info(f"Updated profile for user '{user_id}'.")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to update profile for user '{user_id}': {e}")
+            raise e
+
+    raise RuntimeError("Firestore client is not available on server.")

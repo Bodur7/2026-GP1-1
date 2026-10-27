@@ -5,8 +5,19 @@ import '../theme/app_colors.dart';
 import '../widgets/app_header.dart';
 import '../models/scan_result.dart';
 import '../services/allergen_scanner_service.dart';
+import '../services/allergy_service.dart';
 import 'scanning_screen.dart';
 import 'image_capture_screen.dart';
+
+class _IngredientBannerItem {
+  final String ingredient;
+  final String category;
+
+  const _IngredientBannerItem({
+    required this.ingredient,
+    required this.category,
+  });
+}
 
 class ScanResultScreen extends StatelessWidget {
   final ScanResult result;
@@ -27,7 +38,79 @@ class ScanResultScreen extends StatelessWidget {
     required this.scannerService,
   });
 
+  static const Map<String, String> _allergenCategoryMap = {
+    'milk': 'Dairy',
+    'dairy': 'Dairy',
+    'tree nuts': 'Nuts',
+    'tree nut': 'Nuts',
+    'nuts': 'Nuts',
+    'peanut': 'Peanuts',
+    'peanuts': 'Peanuts',
+    'cereals containing gluten': 'Gluten',
+    'gluten': 'Gluten',
+    'wheat': 'Gluten',
+    'egg': 'Eggs',
+    'eggs': 'Eggs',
+    'soybean': 'Soy',
+    'soy': 'Soy',
+    'soya': 'Soy',
+    'crustaceans': 'Shellfish',
+    'molluscs': 'Shellfish',
+    'shellfish': 'Shellfish',
+    'fish': 'Fish',
+    'sesame': 'Sesame',
+    'mustard': 'Mustard',
+    'celery': 'Celery',
+    'lupin': 'Lupin',
+    'sulphur dioxide and sulphites': 'Sulphites',
+    'sulphites': 'Sulphites',
+    'sulfites': 'Sulphites',
+  };
+
+  static String formatCategory(String allergen) {
+    final cleaned = allergen
+        .trim()
+        .replaceAll(RegExp(r'\ballergy\b', caseSensitive: false), '')
+        .trim()
+        .toLowerCase();
+
+    if (_allergenCategoryMap.containsKey(cleaned)) {
+      return _allergenCategoryMap[cleaned]!;
+    }
+
+    if (cleaned.contains('gluten') || cleaned.contains('cereal')) {
+      return 'Gluten';
+    }
+    if (cleaned.contains('sulph') || cleaned.contains('sulf')) {
+      return 'Sulphites';
+    }
+    if (cleaned.contains('crustacean') || cleaned.contains('mollusc')) {
+      return 'Shellfish';
+    }
+    if (cleaned.contains('tree nut')) {
+      return 'Nuts';
+    }
+    if (cleaned.contains('milk') || cleaned.contains('dairy')) {
+      return 'Dairy';
+    }
+
+    if (cleaned.isEmpty) return 'Allergen';
+
+    return cleaned.split(' ').where((w) => w.isNotEmpty).map((word) {
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
+  }
+
+  static String capitalize(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return trimmed;
+    return trimmed[0].toUpperCase() + trimmed.substring(1);
+  }
+
   Future<void> _scanAnother(BuildContext context) async {
+    final activeAllergens =
+        AllergyService().currentAllergies ?? userAllergens;
+
     try {
       final String? tempPath =
           await _channel.invokeMethod<String>('openImageCapture');
@@ -46,7 +129,7 @@ class ScanResultScreen extends StatelessWidget {
               builder: (_) => ScanningScreen(
                 imageBytes: bytes,
                 userId: userId,
-                userAllergens: userAllergens,
+                userAllergens: activeAllergens,
                 scannerService: scannerService,
               ),
             ),
@@ -61,7 +144,7 @@ class ScanResultScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) => ImageCaptureScreen(
           userId: userId,
-          userAllergens: userAllergens,
+          userAllergens: activeAllergens,
           scannerService: scannerService,
         ),
       ),
@@ -70,9 +153,40 @@ class ScanResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSafe = result.isSafe;
-    final conflictCount =
-        result.allergensDetected.where((e) => e.isUserAllergen).length;
+    final userAllergenDetections =
+        result.allergensDetected.where((e) => e.isUserAllergen).toList();
+    final hasUserAllergens = userAllergenDetections.isNotEmpty;
+    final isSafe = result.isSafe || (!hasUserAllergens && result.allergensDetected.isEmpty);
+
+    final categories = userAllergenDetections
+        .map((e) => formatCategory(e.allergen))
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList();
+
+    final List<_IngredientBannerItem> bannerItems = [];
+    for (final item in userAllergenDetections) {
+      final cat = formatCategory(item.allergen);
+      if (item.matchedIngredients.isNotEmpty) {
+        for (final ing in item.matchedIngredients) {
+          final parts = ing
+              .split(',')
+              .map((s) => s.trim())
+              .where((s) => s.isNotEmpty);
+          for (final part in parts) {
+            bannerItems.add(_IngredientBannerItem(
+              ingredient: part,
+              category: cat,
+            ));
+          }
+        }
+      } else {
+        bannerItems.add(_IngredientBannerItem(
+          ingredient: cat,
+          category: cat,
+        ));
+      }
+    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -111,7 +225,11 @@ class ScanResultScreen extends StatelessWidget {
                           Text(
                             isSafe
                                 ? 'No matching allergens detected from your profile.'
-                                : '$conflictCount ingredients match your allergy profile.',
+                                : (categories.isNotEmpty
+                                    ? 'Contains ${categories.join(', ')}'
+                                    : (result.allergensDetected.isNotEmpty
+                                        ? 'Contains ${result.allergensDetected.map((e) => formatCategory(e.allergen)).toSet().join(', ')}'
+                                        : 'No matching allergens detected from your profile.')),
                             style: TextStyle(
                               fontSize: 13,
                               color: isSafe
@@ -125,92 +243,80 @@ class ScanResultScreen extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // Detected Ingredients Section
-                    const Text(
-                      'Detected Ingredients',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textDark,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Ingredient Pills
-                    ...result.allergensDetected.map((item) {
-                      final isConflict = item.isUserAllergen;
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isConflict
-                              ? AppColors.alertBg
-                              : AppColors.chipUnselectedBg,
-                          borderRadius: BorderRadius.circular(12),
+                    if (bannerItems.isNotEmpty) ...[
+                      const Text(
+                        'Detected Ingredients',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textDark,
                         ),
-                        child: Row(
-                          children: [
-                            Text(
-                              isConflict ? '! ' : '✓ ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isConflict
-                                    ? AppColors.alertSoftRed
-                                    : AppColors.primaryGreen,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '${item.matchedIngredients.join(', ')} (${item.allergen.replaceAll(' allergy', '')})',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: isConflict
-                                      ? AppColors.alertSoftRed
-                                      : AppColors.textDark,
+                      ),
+                      const SizedBox(height: 12),
+                      ...bannerItems.map((item) {
+                        final isDirectCategory = item.ingredient.trim().toLowerCase() ==
+                            item.category.trim().toLowerCase();
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: AppColors.alertBg,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  capitalize(item.ingredient),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: AppColors.alertSoftRed,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 16),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.alertSoftRed.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  isDirectCategory ? 'Allergen' : item.category,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                    color: AppColors.alertSoftRed,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 16),
+                    ],
 
-                    // Full Ingredient Text Card
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.sageBg,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Full Ingredient Text',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: AppColors.darkGreen,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            result.ingredientList.isNotEmpty
-                                ? result.ingredientList
-                                : result.extractedOcrText,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              height: 1.5,
-                              color: AppColors.darkGreen,
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 8),
+
+                    // Disclaimer
+                    const Center(
+                      child: Text(
+                        'Misbar may make mistakes or miss allergens',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
 
                     // Primary Button: Scan another packed label
                     SizedBox(

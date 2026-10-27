@@ -148,7 +148,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           decoration: BoxDecoration(
                             color: AppColors.alertBg,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.alertRed.withOpacity(0.3)),
+                            border: Border.all(color: AppColors.alertRed.withValues(alpha: 0.3)),
                           ),
                           child: Row(
                             children: [
@@ -268,9 +268,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           color: AppColors.sageBg,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               'Password requirements',
                               style: TextStyle(

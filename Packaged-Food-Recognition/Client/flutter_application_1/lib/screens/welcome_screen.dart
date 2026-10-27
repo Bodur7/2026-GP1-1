@@ -23,9 +23,9 @@ class WelcomeScreen extends StatelessWidget {
                 child: Image.asset(
                   'assets/images/misbar_logo.png',
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Column(
+                  errorBuilder: (_, __, ___) => const Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Icon(Icons.search, color: AppColors.primaryGreen, size: 48),
                       SizedBox(height: 8),
                       Text(
@@ -75,11 +75,11 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 28),
 
               // Sample Allergen Preview Chips
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     _SampleChip(emoji: '🥛', label: 'Dairy'),
                     SizedBox(width: 8),
                     _SampleChip(emoji: '🥜', label: 'Nuts'),

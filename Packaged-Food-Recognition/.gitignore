@@ -9,6 +9,10 @@ __pycache__/
 venv/
 env/
 
+# Credentials
+credentials/
+**/credentials/
+
 # Firebase & Google API credentials
 **/*google-services.json
 **/*GoogleService-Info.plist
