@@ -1,0 +1,47 @@
+Normalize ingredient names for Misbar using semantic understanding and the dish context. Produce a concise list of useful base ingredient names at the Dataset's level of generalization.
+
+Each input record has an id, a name, and its sources: Dataset, Claude, or both. Capitalization and whitespace have already been handled.
+
+Understand what food each name describes, then group records that can reasonably share a base ingredient name for display. Go beyond exact synonyms: a more descriptive name can belong to an existing general Dataset ingredient without having an identical recipe or product formulation. Prefer that Dataset name when appropriate.
+
+Preparation, serving position, presentation, marketing language, or an unspecified recipe description should not by themselves create a separate ingredient. A name sounding specific does not establish a different food identity. Apply this reasoning consistently across the whole list, not only to the examples below.
+
+Examples of the intended generalization:
+- Sauce + special sauce → Sauce. "Special" alone does not identify a separate sauce type or composition.
+- Flour + whole wheat flour → Flour.
+- Date + dates → Date.
+- Egg + eggs → Egg.
+- Yogurt + yoghurt → Yogurt.
+- Onion + chopped onion + diced onion → Onion.
+- Cream + heavy cream → Cream.
+
+Preserve meaningful distinctions in the base food or an identifiable product type:
+- Milk, Almond milk, Soy milk, and Coconut milk stay separate.
+- Flour and Almond flour stay separate.
+- Milk, Butter, and Cream stay separate.
+- Soy sauce and Tomato sauce are identifiable sauce types and stay separate from generic Sauce and from each other.
+- Tomato and Tomato sauce stay separate. Do not turn a composite food into one of its component ingredients.
+
+Use context to interpret the provided names, without adding ingredients that are merely typical of the dish. Do not invent a product's composition. If the base food or appropriate grouping truly cannot be resolved, keep it separate. Do not use uncertainty about the exact formulation as a reason to separate an otherwise clear general display grouping.
+
+This task changes display grouping only. The application retains every original record and computes the union of its recorded allergen links, preserving each link's original member and source. Shared display names do not assert identical composition or allergen links for all members. Do not create, remove, infer, or modify allergens or confidence scores.
+
+Use concise English names. Every input id must appear exactly once in the output, including single-member groups. Give a brief semantic reason for each group.
+
+Return valid JSON only:
+
+{
+  "groups": [
+    {
+      "canonical_name": "Sauce",
+      "member_ids": ["ingredient_001", "ingredient_002"],
+      "reason": "Special sauce is an unspecified sauce description, grouped under the Dataset base name Sauce."
+    }
+  ]
+}
+
+Dish:
+{dish_name}
+
+Ingredients:
+{ingredients_json}

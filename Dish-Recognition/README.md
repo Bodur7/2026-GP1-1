@@ -1,3 +1,5 @@
+> **Full pipeline update (28 October 2026):** the nine-stage upload application, Top-1 output, ingredient/allergen data and Claude name normalization are available. Start with [README_PIPELINE.md](README_PIPELINE.md). The original large checkpoint stays in the team's OneDrive share.
+
 # Dish Recognition — Misbar
 
 This directory contains Misbar's dish-recognition component. It preserves the verified 121-class DINOv2 baseline, its dataset reports, evaluation results, and audit files.

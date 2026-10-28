@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+!.env.example
+.misbar-env-*
+manual_testing/pipeline_results/
+manual_testing/quality_results/
+manual_testing/results/
+models/*.pt
+models/*.pth
+models/*.ckpt
+models/*.safetensors

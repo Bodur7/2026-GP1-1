@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "registry": "data_governance/human_label_registry.json",
+  "registry_sha256": "74b458c7e698afb7c36fabd074a239bd24d3f467b95a42d71c2247acda2eda29",
+  "registry_revision": 1,
+  "saved_validation_predictions": {
+    "source": "analysis/dino_confidence_validation_20261018_005914/validation_predictions.csv",
+    "reviewed": "data_governance/reviewed_validation_predictions_v1_74b458c7e6.csv",
+    "label_field": "ground_truth",
+    "prediction_field": "top1",
+    "effective_label_field": "reviewed_ground_truth",
+    "correctness_field": "reviewed_prediction_correct",
+    "eligibility_field": "classification_metric_eligible"
+  },
+  "derived_report_builders": [
+    "experiments/ingredient_allergen_fusion_200_20261018/build_reports.py"
+  ]
+}
