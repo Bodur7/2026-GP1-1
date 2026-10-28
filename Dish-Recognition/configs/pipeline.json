@@ -8,7 +8,7 @@
   "max_upload_bytes": 4194304,
   "max_image_pixels": 20000000,
   "normalization_enabled": true,
-  "normalization_prompt": "ingredient_normalization_prompt_v2.txt",
+  "normalization_prompt": "ingredient_normalization_prompt.txt",
   "normalization_schema": "ingredient_normalization_schema_v1.json",
   "normalization_max_tokens": 8192,
   "allergy_matching_enabled": false

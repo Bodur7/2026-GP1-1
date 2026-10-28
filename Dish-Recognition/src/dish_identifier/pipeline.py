@@ -25,7 +25,7 @@ from .recipe_fusion import NAME_NORMALIZATION_METHOD, merge_sources, validate_ex
 
 PROJECT = Path(__file__).resolve().parents[2]
 ASSETS = Path(__file__).with_name("assets")
-PIPELINE_REVISION = "misbar-normalization-v2-top1-20261028"
+PIPELINE_REVISION = "misbar-normalization-v3-short-top1-20261028"
 STAGES = [("upload", "Image validation"), ("quality", "Image quality"), ("food_gate", "Food serving check"),
           ("classification", "Dish recognition"), ("ood", "Supported dish check"),
           ("dataset", "Recipe ingredients & linked allergens"), ("extraction", "Claude ingredient analysis"),

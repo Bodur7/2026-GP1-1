@@ -19,14 +19,14 @@
     "source": "experiments/ingredient_allergen_fusion_200_20261018/inputs/response_schema.json",
     "role": "Runtime copy; original source unchanged"
   },
-  "ingredient_normalization_prompt_v2.txt": {
-    "sha256": "fb6e4fd99d9e8723fbc495fd87e3886ec85d3ae7f084d9c8b660b39466712496",
-    "source": "configs/ingredient_normalization_prompt_v2.txt",
-    "role": "User-authorized live ingredient normalization; exact version from reviewed trial"
-  },
   "ingredient_normalization_schema_v1.json": {
     "sha256": "4b602fdd7f30c35589bc1977add8f2af15e195c73a18f6eb13d2b9c4a2c89a33",
     "source": "configs/ingredient_normalization_schema_v1.json",
     "role": "User-authorized live ingredient normalization; exact version from reviewed trial"
+  },
+  "ingredient_normalization_prompt.txt": {
+    "sha256": "dc79cb28d6e39ee0f70e5a74ffece9b8ba07ce85e35ba864d9a02193a7fea67d",
+    "source": "src/dish_identifier/assets/ingredient_normalization_prompt.txt",
+    "role": "Active user-approved concise semantic grouping prompt, including cream sauce and prepared egg examples. Previous versions remain in Git history."
   }
 }

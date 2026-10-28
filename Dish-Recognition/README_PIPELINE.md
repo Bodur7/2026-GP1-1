@@ -1,6 +1,6 @@
 # Misbar full pipeline — 28 October 2026
 
-Current approach: `misbar-normalization-v2-top1-20261028`. This adds the full local
+Current approach: `misbar-normalization-v3-short-top1-20261028`. This adds the full local
 upload application to the existing frozen DINOv2 + Nonlinear OOD runtime.
 
 1. Validate the image and record exact SHA-256/human-review provenance.
@@ -11,7 +11,7 @@ upload application to the existing frozen DINOv2 + Nonlinear OOD runtime.
 6. Retrieve ingredients and embedded allergen links from the configured data file.
 7. Claude extracts visible/inferred ingredients, confidence and potential links.
 8. Merge Dataset + Claude, grouping capitalization/whitespace differences.
-9. Claude groups ingredient names by meaning using the v2 prompt. The application
+9. Claude groups ingredient names by meaning using the concise prompt. The application
    validates every original id and rebuilds allergen unions and causes from the
    original evidence. Sources, original names and confidence remain available.
 
@@ -19,6 +19,13 @@ Rejection stops later stages. Provider failure is an error; requests are not
 automatically retried. User-allergy profile matching remains disabled. Automated
 outputs are not human-reviewed labels. Human label decisions are provenance only
 and never replace the classifier's prediction.
+
+The active normalization prompt is a single file:
+`src/dish_identifier/assets/ingredient_normalization_prompt.txt`. It is the
+223-word prompt approved on 28 October, including Cream + cream sauce and
+Egg/eggs/whole egg/boiled egg/fried egg display grouping. Milk, Butter and Cream
+remain separate. Allergen links retain their original member/source scope.
+Future prompt edits update this file; prior text remains in Git history.
 
 ## Setup
 
@@ -94,3 +101,8 @@ DINOv2 + frozen OOD smoke check on a synthetic image with the original external
 checkpoint. No paid requests, training or reserved OOD Final Test access was used.
 Tests, reports, example images, experiment archives and development environments
 are deliberately omitted from this runtime-only upload.
+
+The concise prompt update passed 51 Python checks and a full cached pipeline
+replay. Two earlier text-only trials verified the cream-sauce case and the
+approved egg forms, including allergen/evidence preservation. Publishing this
+update sends no new service requests and adds no reports or experiment copies.
