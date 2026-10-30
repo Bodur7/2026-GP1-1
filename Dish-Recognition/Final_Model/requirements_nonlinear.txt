@@ -1,0 +1,7 @@
+# Verified CPU inference environment: Python 3.14.7 on macOS ARM64.
+# tkinter (photo chooser) and IANA timezone data are supplied by the OS/Python.
+torch==2.13.0
+torchvision==0.28.0
+Pillow==12.3.0
+numpy==2.5.3
+scipy==1.18.1
